@@ -5,6 +5,7 @@ function BiddingConsole({
   player,
   onPlaceBid,
   onSellPlayer,
+  onUnsoldPlayer,
   onPrevPlayer,
   onNextPlayer,
   currentIndex,
@@ -31,15 +32,32 @@ function BiddingConsole({
       {/* Auctioneer Stage Controls */}
       {isAdmin && (
         <div className="console-panel auctioneer-panel">
-          <h3>🎙️ Auctioneer Dashboard</h3>
+          <h3 className="panel-title">🕹️ TACTICAL CONTROL</h3>
           
+          <div className="action-buttons-row">
+            <button
+              onClick={onSellPlayer}
+              disabled={isSold}
+              className={`action-button hammer-button ${isSold ? 'disabled' : ''}`}
+            >
+              🔨 HAMMER DOWN
+            </button>
+            <button
+              onClick={onUnsoldPlayer}
+              disabled={player.status === 'UNSOLD'}
+              className={`action-button unsold-button ${player.status === 'UNSOLD' ? 'disabled' : ''}`}
+            >
+              ♦ UNSOLD
+            </button>
+          </div>
+
           <div className="stage-navigation">
             <button
               onClick={onPrevPlayer}
               disabled={currentIndex === 0}
               className="nav-button prev-button"
             >
-              ◀ Previous Player
+              ◀ PREV
             </button>
             <span className="stage-indicator">
               {currentIndex + 1} / {totalPlayers}
@@ -49,75 +67,78 @@ function BiddingConsole({
               disabled={currentIndex === totalPlayers - 1}
               className="nav-button next-button"
             >
-              Next Player ▶
+              NEXT ▶
             </button>
           </div>
-
-          {!isSold ? (
-            <button
-              onClick={onSellPlayer}
-              className="action-button sell-button"
-            >
-              🔨 Hammer Down (Mark SOLD)
-            </button>
-          ) : (
-            <div className="auctioneer-msg success">
-              ✅ Player successfully sold to {player.team?.name}
-            </div>
-          )}
         </div>
       )}
 
       {/* Franchise Owner Console */}
       {isOwner && (
         <div className="console-panel owner-panel">
-          <h3>🏏 Franchise Bidding Desk</h3>
+          <h3 className="panel-title">🏏 FRANCHISE BIDDING DESK</h3>
           
           {!isSold ? (
             <div className="bidding-actions">
-              <p className="bidding-hint">
-                As owner of <strong>{user.teamName}</strong>, raise the current price:
-              </p>
-              
               <div className="increment-row">
                 <button
                   onClick={() => onPlaceBid(2000000, true)} // true indicates incremental
                   className="bid-increment-btn l20"
                 >
-                  Raise +₹20L
+                  +₹20L
                 </button>
                 <button
                   onClick={() => onPlaceBid(5000000, true)}
                   className="bid-increment-btn l50"
                 >
-                  Raise +₹50L
+                  +₹50L
                 </button>
                 <button
                   onClick={() => onPlaceBid(10000000, true)}
                   className="bid-increment-btn c1"
                 >
-                  Raise +₹1Cr
+                  +₹1Cr
                 </button>
               </div>
 
               <form onSubmit={handleCustomSubmit} className="custom-bid-form">
                 <input
                   type="number"
-                  placeholder="Enter custom total bid (e.g. 25000000)"
+                  placeholder="Custom bid (e.g. 25000000)"
                   value={customBidStr}
                   onChange={(e) => setCustomBidStr(e.target.value)}
                   className="custom-bid-input"
                 />
                 <button type="submit" className="custom-bid-submit">
-                  Submit Bid
+                  SUBMIT
                 </button>
               </form>
             </div>
           ) : (
             <div className="bidding-msg finished">
-              🔒 Bidding is closed. Player acquired by {player.team?.name}.
+              🔒 CLOSED • ACQUIRED BY {player.team?.name?.toUpperCase()}
             </div>
           )}
+
+          <div className="stage-navigation">
+            <button
+              onClick={onPrevPlayer}
+              disabled={currentIndex === 0}
+              className="nav-button prev-button"
+            >
+              ◀ PREV
+            </button>
+            <span className="stage-indicator">
+              {currentIndex + 1} / {totalPlayers}
+            </span>
+            <button
+              onClick={onNextPlayer}
+              disabled={currentIndex === totalPlayers - 1}
+              className="nav-button next-button"
+            >
+              NEXT ▶
+            </button>
+          </div>
         </div>
       )}
     </div>
