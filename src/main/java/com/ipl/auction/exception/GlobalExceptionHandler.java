@@ -71,6 +71,24 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(ex.getMessage()));
     }
 
+    @ExceptionHandler(RtmNotAvailableException.class)
+    public ResponseEntity<ApiResponse<Void>> handleRtmNotAvailable(RtmNotAvailableException ex) {
+        log.warn("RTM validation failed: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error(ex.getMessage()));
+    }
+
+    @ExceptionHandler(ComplianceViolationException.class)
+    public ResponseEntity<ApiResponse<Void>> handleComplianceViolation(ComplianceViolationException ex) {
+        log.warn("Franchise compliance violation: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ApiResponse.error(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidAuctionStateException.class)
+    public ResponseEntity<ApiResponse<Void>> handleInvalidAuctionState(InvalidAuctionStateException ex) {
+        log.warn("Invalid auction state: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error(ex.getMessage()));
+    }
+
     @ExceptionHandler({
             OptimisticLockException.class,
             ObjectOptimisticLockingFailureException.class

@@ -28,4 +28,9 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
     List<Player> findByAuctionSetCategory(String category);
 
     List<Player> findByStatusOrderByBasePriceDesc(PlayerStatus status);
+
+    List<Player> findByStatusIn(List<PlayerStatus> statuses);
+
+    @Query("SELECT DISTINCT p.auctionSetCategory FROM Player p WHERE p.auctionSetCategory IS NOT NULL ORDER BY p.auctionSetCategory ASC")
+    List<String> findDistinctAuctionSetCategories();
 }

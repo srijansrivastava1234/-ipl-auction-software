@@ -2,12 +2,12 @@
 
 **Author:** Srijan Srivastava (@srijansrivastava1234)  
 **Role:** Member 1 - Project Lead & Core Backend REST API Developer  
-**Date:** August 30, 2026  
-**Status:** 55% Total Project Milestone Completed (100% of Member 1 Assigned Core Backend Scope)
+**Date:** September 9, 2026  
+**Status:** 85% Total Project Milestone Completed (100% of Member 1 Assigned Deliverables through Week 10)
 
 ---
 
-## 📌 Scope & Architecture Summary
+## 📌 Scope & Architecture Summary (Weeks 1 – 10)
 
 ### 1. Base Spring Boot Architecture & Configurations
 - Initialized Spring Boot 3.x with Java 17 and Maven Wrapper.
@@ -27,12 +27,26 @@
 
 ### 4. Global Exception Handler (`@RestControllerAdvice`)
 - Centralized JSON error format (`ApiResponse.error(...)`).
-- Handlers for `ResourceNotFoundException`, `InsufficientPurseException`, `SquadLimitExceededException`, `InvalidBidException`, and validation errors (`MethodArgumentNotValidException`).
+- Handlers for `ResourceNotFoundException`, `InsufficientPurseException`, `SquadLimitExceededException`, `InvalidBidException`, `RtmNotAvailableException`, `ComplianceViolationException`, `InvalidAuctionStateException`, and validation errors (`MethodArgumentNotValidException`).
+
+### 5. Right To Match (RTM) Engine (`/api/v1/auction/rtm`)
+- **Card Balance Audits**: Up to 2 RTM cards per franchise (`GET /api/v1/teams/{id}/rtm`).
+- **Atomic Matching & Reallocation**: Matches highest winning bid, refunds previous bidder, debits RTM team, and reassigns squad roster atomically (`POST /api/v1/auction/rtm/exercise`).
+
+### 6. Accelerated Auction Phase (`/api/v1/auction/accelerated`)
+- **Shortlist Nominations**: Franchises nominate unsold/available cricketers for accelerated bidding.
+- **Pool Aggregation**: Real-time accelerated pool monitoring and fast-track staging.
+
+### 7. BCCI Roster & Purse Compliance Audit (`/api/v1/teams/{id}/compliance`)
+- Single franchise and league-wide audits validating 18–25 player limits, foreign player caps, minimum 75% purse spend rule, and role compositions.
+
+### 8. Macro Auction Analytics & Team Roster Export (`/api/v1/reports`)
+- Macro whole-auction expenditure statistics, record buys, category spend breakdowns, and comprehensive franchise squad roster exports.
 
 ---
 
 ## 🔒 Scope Boundaries Verified
-- ✅ No Security/JWT filters (Reserved for Member 2)
-- ✅ No manual SQL schema locking scripts (Reserved for Member 3)
-- ✅ No Frontend UI code (Reserved for Member 4)
-- ✅ No QA/Swagger test configuration (Reserved for Member 5)
+- ✅ Security/JWT module separated and cleanly integrated (Member 2)
+- ✅ Database concurrency, pessimistic row locks, and financial ledger preserved (Member 3)
+- ✅ Frontend SPA layout and styling independent (Member 4)
+- ✅ Full JUnit 5 test suite with 18 automated tests passing (Member 5)
