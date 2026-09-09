@@ -63,3 +63,14 @@ logging:
     com.ipl.auction: DEBUG
     org.hibernate.SQL: INFO
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+# Spring Boot Actuator Configuration (Week 12 Scope)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+

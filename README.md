@@ -2,14 +2,16 @@
 
 [![Java](https://img.shields.io/badge/Java-17-orange.svg)](https://www.oracle.com/java/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.3-brightgreen.svg)](https://spring.io/projects/spring-boot)
+[![WebSockets](https://img.shields.io/badge/WebSockets-STOMP-blueviolet.svg)](https://spring.io/)
 [![Security](https://img.shields.io/badge/Spring%20Security-6.x%20%7C%20JWT-blue.svg)](https://spring.io/projects/spring-security)
 [![Database](https://img.shields.io/badge/MySQL-8.0%20%7C%20JPA%20Hibernate-blueviolet.svg)](https://www.mysql.com/)
-[![Tests](https://img.shields.io/badge/JUnit%205-18%2F18%20Passed-success.svg)](https://junit.org/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](https://www.docker.com/)
+[![Tests](https://img.shields.io/badge/JUnit%205-24%2F24%20Passed-success.svg)](https://junit.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-An enterprise-grade, real-time **IPL Mega Auction Software** platform engineered with **Java 17, Spring Boot 3.x, Spring Data JPA, MySQL, Spring Security 6 (JWT + RBAC)**, and a modern responsive **Single Page Application (SPA)** frontend.
+An enterprise-grade, real-time **IPL Mega Auction Software** platform engineered with **Java 17, Spring Boot 3.x, Spring Data JPA, MySQL 8.0, WebSockets (STOMP), Spring Security 6 (JWT + RBAC), Micrometer Actuator, Docker**, and a modern responsive **Single Page Application (SPA)** frontend.
 
-The platform simulates live BCCI Indian Premier League auctions with **high-concurrency live bidding, pessimistic write locking, purse deduction engines, Right To Match (RTM) card management, accelerated auction rounds, BCCI regulatory compliance audits**, and **macro auction analytics**.
+The platform simulates live BCCI Indian Premier League auctions with **high-concurrency live bidding, pessimistic write locking, real-time WebSocket ticker updates, automated 30-second countdown timers with auto-hammer strikes, purse deduction engines, Right To Match (RTM) card management, accelerated auction rounds, BCCI regulatory compliance audits**, and **macro auction analytics**.
 
 ---
 
@@ -19,29 +21,29 @@ The project development is distributed cleanly across **5 specialized engineerin
 
 | Member & Role | Assigned Domain | Core Focus Areas | Dedicated Branch |
 | :--- | :--- | :--- | :--- |
-| **Member 1: Project Lead & Core Backend Developer** | Architecture & Core REST APIs | Spring Boot project architecture, Team CRUD, Player CRUD, Purse deduction logic, Squad reserve constraints, Global Exception Handler, RTM Engine, Accelerated Phase, Compliance Audits, Macro Reports | `main` / `develop` |
-| **Member 2: Security & Authentication Specialist** | Security & RBAC | Spring Security 6, Stateless JWT Provider (`JwtUtils`), Request Filter (`JwtAuthenticationFilter`), Auth REST APIs (`/api/v1/auth/register`, `/api/v1/auth/login`), Role-Based Access Control (`ADMIN` vs `TEAM_OWNER`) | `feature/security-auth` |
+| **Member 1: Project Lead & Core Backend Developer** | Architecture, Core REST & Real-Time | Spring Boot project architecture, Team CRUD, Player CRUD, Purse deduction logic, Squad reserve constraints, Global Exception Handler, RTM Engine, Accelerated Phase, Compliance Audits, STOMP WebSockets, Countdown Timer, Dockerization | `main` / `develop` |
+| **Member 2: Security & Authentication Specialist** | Security & RBAC | Spring Security 6, Stateless JWT Provider (`JwtUtils`), Request Filter (`JwtAuthenticationFilter`), Auth REST APIs (`/api/v1/auth/register`, `/api/v1/auth/login`), Role-Based Access Control (`ADMIN` vs `TEAM_OWNER`), Rate limiting | `feature/security-auth` |
 | **Member 3: Database & Bidding Engine Developer** | JPA & Concurrency | MySQL DDL `schema.sql`, JPA Entities, Flyway migrations, Dynamic IPL bid increments, Pessimistic Row Locking (`SELECT ... FOR UPDATE`), Double-bid race condition prevention, Financial Audit Ledger | `feature/database-bidding` |
-| **Member 4: Frontend UI & Real-Time Portal Lead** | Web UI & Client Integration | Glassmorphism & Neon theme, Auth Screens (Login/Register), Admin Onboarding Console, Live Auction Room (Player card, dynamic increment controls, active bidder), Team Squad & Purse Tracker | `feature/frontend-ui` |
-| **Member 5: QA, Testing & API Documentation Lead** | QA, Automation & CI/CD | OpenAPI / Swagger UI 3 (`/swagger-ui.html`), Postman Collections & Environments, JUnit 5 & Mockito Unit Test Suite, `@SpringBootTest` Integration Tests, Multi-threaded Concurrency Stress Tests, GitHub Actions CI Pipeline | `feature/qa-testing-docs` |
+| **Member 4: Frontend UI & Real-Time Portal Lead** | Web UI & Client Integration | Glassmorphism & Neon theme, Auth Screens (Login/Register), Admin Onboarding Console, Live Auction Room (Player card, dynamic increment controls, active bidder), Team Squad & Purse Tracker, Real-time WebSocket bid ticker | `feature/frontend-ui` |
+| **Member 5: QA, Testing & API Documentation Lead** | QA, Automation & CI/CD | OpenAPI / Swagger UI 3 (`/swagger-ui.html`), Postman Collections & Environments, JUnit 5 & Mockito Unit Test Suite, `@SpringBootTest` Integration Tests, Multi-threaded Concurrency Stress Tests, Full 12-week test suite, GitHub Actions CI Pipeline | `feature/qa-testing-docs` |
 
 ---
 
-## 📅 12-Week Roadmap & Weekly Milestones (Weeks 1 – 10 Completed)
+## 📅 Complete 12-Week Roadmap & Milestones (100% Completed)
 
 ```
-Week 1  ──► Architecture Scaffolding & Git Branching Setup
-Week 2  ──► Team CRUD Management APIs & DTO Models
-Week 3  ──► Player CRUD Management APIs & Category Staging Pools
-Week 4  ──► Centralized Global Exception Handler (@RestControllerAdvice)
-Week 5  ──► Team Purse Deduction Engine & Minimum Squad Reserve Rule
-Week 6  ──► Franchise Roster Constraints (18–25 Squad Size, Max 8 Overseas)
-Week 7  ──► Player Lifecycle State Machine & Auctioneer Podium Endpoints
-Week 8  ──► Franchise Purse Queries & Financial Audit Ledger Integration
-Week 9  ──► API Contract Stabilization, CORS Config & Unified Response Envelope
-Week 10 ──► Advanced IPL Mechanics: RTM Engine, Accelerated Round, BCCI Compliance Audit & Macro Reports
-Week 11 ──► [In Progress] End-to-End WebSocket / STOMP Live Auction Room Broadcasts
-Week 12 ──► Final Production Packaging, Docker Containerization & Deployment
+Week 1  ──► Architecture Scaffolding & Git Branching Setup [COMPLETED]
+Week 2  ──► Team CRUD Management APIs & DTO Models [COMPLETED]
+Week 3  ──► Player CRUD Management APIs & Category Staging Pools [COMPLETED]
+Week 4  ──► Centralized Global Exception Handler (@RestControllerAdvice) [COMPLETED]
+Week 5  ──► Team Purse Deduction Engine & Minimum Squad Reserve Rule [COMPLETED]
+Week 6  ──► Franchise Roster Constraints (18–25 Squad Size, Max 8 Overseas) [COMPLETED]
+Week 7  ──► Player Lifecycle State Machine & Auctioneer Podium Endpoints [COMPLETED]
+Week 8  ──► Franchise Purse Queries & Financial Audit Ledger Integration [COMPLETED]
+Week 9  ──► API Contract Stabilization, CORS Config & Unified Response Envelope [COMPLETED]
+Week 10 ──► Advanced IPL Mechanics: RTM Engine, Accelerated Round, BCCI Compliance Audit & Macro Reports [COMPLETED]
+Week 11 ──► Real-Time WebSockets (STOMP), Live Bid Broadcasting & 30s Countdown Timer with Auto-Hammer [COMPLETED]
+Week 12 ──► Production Observability (Actuator Metrics), Rate Limiting, Multi-Stage Docker & Full Release [COMPLETED]
 ```
 
 ---
@@ -65,17 +67,34 @@ Week 12 ──► Final Production Packaging, Docker Containerization & Deployme
   - $₹1.00\,\text{Cr} \le \text{Current Bid} < ₹5.00\,\text{Cr} \implies \mathbf{+\,₹20\,\text{Lakhs}}$
   - $₹5.00\,\text{Cr} \le \text{Current Bid} < ₹10.00\,\text{Cr} \implies \mathbf{+\,₹25\,\text{Lakhs}}$
   - Current Bid $\ge ₹10.00\,\text{Cr} \implies \mathbf{+\,₹50\,\text{Lakhs}}$
-* **Pessimistic Concurrency Locking**: Uses `@Lock(LockModeType.PESSIMISTIC_WRITE)` to serialize simultaneous bids on the same player, preventing race conditions.
+* **Pessimistic Concurrency Locking**: Uses `@Lock(LockModeType.PESSIMISTIC_WRITE)` to serialize simultaneous bids on the same player, eliminating race conditions.
 * **Self-Outbidding Prevention**: Blocks a franchise holding the winning bid from bidding against itself.
 
-### 3. Spring Security 6 & JWT Authentication
-* **Stateless Session Architecture**: Stateless JWT Bearer token authentication.
-* **Password Hashing**: Industry-standard `BCryptPasswordEncoder`.
-* **Role-Based Access Control (RBAC)**:
-  - `ROLE_ADMIN`: Auctioneer controls (staging players, striking hammer, regulatory audits).
-  - `ROLE_TEAM_OWNER`: Submitting bids, shortlisting players, exercising RTM cards.
+### 3. Real-Time WebSockets & Automated Countdown Timer Engine (Week 11)
+* **STOMP / SockJS WebSocket Broker**:
+  - Connection endpoint on `/ws-auction`.
+  - Client bid destination on `/app/bid`.
+  - Instant live bid broadcasts on `/topic/bids`.
+* **Automated 30-Second Countdown**:
+  - Second-by-second ticker published to `/topic/timer`.
+  - Automatic clock reset to 30 seconds upon every valid bid.
+  - Auctioneer controls: start, pause, resume, stop.
+* **Automatic Hammer Strike Engine**:
+  - When the countdown reaches 0 seconds, automatically strikes the hammer:
+    - Sells player to leading team, debits purse, records squad roster, emits `HAMMER_SOLD`.
+    - If no bids were placed, marks player `UNSOLD` and emits `HAMMER_UNSOLD`.
 
-### 4. Advanced IPL Auction Rules (Week 10 Deliverables)
+### 4. Observability, Security Rate Limiting & Containerization (Week 12)
+* **Production Observability & Metrics**:
+  - Spring Boot Actuator integration (`/actuator/health`, `/actuator/metrics`).
+  - Micrometer counters tracking live metrics: `auction.bids.total`, `auction.players.sold`.
+* **Sliding-Window Rate Limiting**:
+  - In-memory rate limiting filter protecting live bidding endpoints against burst DoS (10 req/sec limit) with HTTP 429.
+* **Multi-Stage Docker Containerization**:
+  - Optimized multi-stage `Dockerfile` (`maven:3.9` build $\rightarrow$ `eclipse-temurin:17` JRE runtime).
+  - Complete `docker-compose.yml` deploying MySQL 8.0 with health checks and application container.
+
+### 5. Advanced IPL Rules & Compliance (Week 10)
 * **Right To Match (RTM) Engine**:
   - Enforces BCCI limit of **2 RTM cards** per franchise.
   - Matches the highest hammer bid price, automatically refunds previous bidder's purse, debits matching team, and reassigns squad roster atomically.
@@ -93,213 +112,142 @@ Week 12 ──► Final Production Packaging, Docker Containerization & Deployme
 
 ---
 
-## 🔌 REST API Catalog
+## 🔌 REST & WebSocket API Catalog
 
 ### 🔐 Authentication (`/api/v1/auth`)
 | Method | Endpoint | Description | Access |
 | :--- | :--- | :--- | :--- |
-| `POST` | `/api/v1/auth/register` | Register new franchise owner or admin | Public |
-| `POST` | `/api/v1/auth/login` | Login and receive JWT bearer token | Public |
+| `POST` | `/api/v1/auth/register` | Register a new user (`ADMIN` or `TEAM_OWNER`) | Public |
+| `POST` | `/api/v1/auth/login` | Authenticate and obtain JWT access token | Public |
 
-### 🏢 Franchise Management (`/api/v1/teams`)
+### 🛡️ Teams (`/api/v1/teams`)
 | Method | Endpoint | Description | Access |
 | :--- | :--- | :--- | :--- |
-| `POST` | `/api/v1/teams` | Register a new franchise | Admin |
-| `GET` | `/api/v1/teams` | List all franchises | Authenticated |
-| `GET` | `/api/v1/teams/{id}` | Get franchise details by ID | Authenticated |
-| `PUT` | `/api/v1/teams/{id}` | Update franchise info/budget | Admin |
-| `DELETE` | `/api/v1/teams/{id}` | Remove franchise | Admin |
-| `GET` | `/api/v1/teams/{id}/purse-summary` | Real-time purse balance, squad count & quota | Authenticated |
-| `GET` | `/api/v1/teams/purse-summary` | League-wide purse summaries | Authenticated |
-| `GET` | `/api/v1/teams/{id}/compliance` | Audit franchise against BCCI roster rules | Admin / Owner |
-| `GET` | `/api/v1/teams/compliance-overview` | League-wide BCCI compliance scorecard | Admin |
+| `POST` | `/api/v1/teams` | Register a new IPL franchise with budget | Admin |
+| `GET` | `/api/v1/teams` | List all registered IPL franchises | All Authenticated |
+| `GET` | `/api/v1/teams/{id}` | Fetch franchise details by ID | All Authenticated |
+| `PUT` | `/api/v1/teams/{id}` | Update franchise name, code, or budget | Admin |
+| `DELETE` | `/api/v1/teams/{id}` | Remove a franchise | Admin |
+| `GET` | `/api/v1/teams/{id}/purse-summary` | Real-time purse balance & squad quota check | All Authenticated |
+| `GET` | `/api/v1/teams/purse-summary` | Roster and purse status for all 10 franchises | All Authenticated |
 
-### 🏏 Player Management (`/api/v1/players`)
+### 🏏 Players (`/api/v1/players`)
 | Method | Endpoint | Description | Access |
 | :--- | :--- | :--- | :--- |
-| `POST` | `/api/v1/players` | Register cricketer into auction pool | Admin |
-| `GET` | `/api/v1/players` | List all cricketers with category filters | Authenticated |
-| `GET` | `/api/v1/players/{id}` | Get cricketer details by ID | Authenticated |
-| `PUT` | `/api/v1/players/{id}` | Update cricketer base price or details | Admin |
-| `DELETE` | `/api/v1/players/{id}` | Remove player from auction staging | Admin |
+| `POST` | `/api/v1/players` | Register cricketer into auction staging pool | Admin |
+| `GET` | `/api/v1/players` | List all auction players (with role/status filters) | All Authenticated |
+| `GET` | `/api/v1/players/{id}` | Fetch player details by ID | All Authenticated |
+| `PUT` | `/api/v1/players/{id}` | Update player profile, base price, or category | Admin |
+| `DELETE` | `/api/v1/players/{id}` | Remove player from auction staging pool | Admin |
 
-### 🔨 Live Auctioneer Workflows (`/api/v1/auction`)
+### 🔨 Live Auctioneer Controls (`/api/v1/auction`)
 | Method | Endpoint | Description | Access |
 | :--- | :--- | :--- | :--- |
-| `POST` | `/api/v1/auction/stage` | Bring cricketer to active podium | Admin |
-| `POST` | `/api/v1/auction/players/{id}/hammer/sold` | Hammer strike: SOLD (deduct purse & assign squad) | Admin |
-| `POST` | `/api/v1/auction/players/{id}/hammer/unsold` | Hammer strike: UNSOLD (moves player to unsold pool) | Admin |
-| `GET` | `/api/v1/teams/{teamId}/rtm` | Query franchise RTM card balance | Authenticated |
-| `POST` | `/api/v1/auction/rtm/exercise` | Match winning bid and acquire cricketer via RTM | Admin / Owner |
-| `GET` | `/api/v1/auction/accelerated/pool` | Retrieve accelerated round unsold & nominated pool | Authenticated |
-| `POST` | `/api/v1/auction/accelerated/nominate` | Submit franchise shortlist nominations | Owner |
-| `POST` | `/api/v1/auction/accelerated/stage/{id}` | Stage nominated player to accelerated podium | Admin |
+| `POST` | `/api/v1/auction/stage` | Bring player to podium (`IN_AUCTION`) | Admin |
+| `POST` | `/api/v1/auction/players/{id}/hammer/sold` | Strike hammer: sold to highest bidder | Admin |
+| `POST` | `/api/v1/auction/players/{id}/hammer/unsold` | Strike hammer: mark player unsold | Admin |
 
-### 💰 Live Bidding Engine (`/api/v1/bids`)
+### ⏱️ Live Auction Countdown Timer (`/api/v1/auction/timer`)
 | Method | Endpoint | Description | Access |
 | :--- | :--- | :--- | :--- |
-| `POST` | `/api/v1/bids/place` | Place concurrent live bid with lock protection | Team Owner |
-| `GET` | `/api/v1/bids/player/{id}/current` | Get current highest bid on active cricketer | Authenticated |
-| `GET` | `/api/v1/bids/player/{id}/history` | Get audit log of all bids on cricketer | Authenticated |
+| `POST` | `/api/v1/auction/timer/start` | Start 30s countdown for player | Admin |
+| `POST` | `/api/v1/auction/timer/pause` | Pause active timer | Admin |
+| `POST` | `/api/v1/auction/timer/resume` | Resume paused timer | Admin |
+| `POST` | `/api/v1/auction/timer/stop` | Stop countdown clock | Admin |
+| `GET` | `/api/v1/auction/timer/status` | Current timer status & seconds remaining | All Authenticated |
 
-### 📊 Analytics & Reports (`/api/v1/reports`)
+### ⚡ Real-Time WebSockets (STOMP)
+| Channel | Destination | Description | Access |
+| :--- | :--- | :--- | :--- |
+| `WS` | `/ws-auction` | SockJS / STOMP connection handshake | Public / Auth |
+| `PUB` | `/app/bid` | Submit real-time bid via WebSocket | Team Owner |
+| `SUB` | `/topic/bids` | Broadcast topic for live bid announcements | All Connected |
+| `SUB` | `/topic/timer` | Broadcast topic for 30s countdown ticks & auto-hammer | All Connected |
+
+### 💰 Live Bidding (`/api/v1/bids`)
 | Method | Endpoint | Description | Access |
 | :--- | :--- | :--- | :--- |
-| `GET` | `/api/v1/reports/auction-summary` | Whole-auction macro statistics & category spend | Authenticated |
-| `GET` | `/api/v1/reports/teams/{id}/roster-export` | Export full franchise squad composition | Authenticated |
+| `POST` | `/api/v1/bids/place` | Submit live bid under pessimistic locking | Team Owner |
+| `GET` | `/api/v1/bids/player/{id}/current`| Fetch active highest bid for player | All Authenticated |
+| `GET` | `/api/v1/bids/player/{id}/history`| Fetch entire chronological bid history | All Authenticated |
+
+### 🔄 Right To Match (RTM) (`/api/v1/auction/rtm`)
+| Method | Endpoint | Description | Access |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/v1/auction/rtm/exercise` | Exercise RTM card: match bid & transfer player | Team Owner |
+| `GET` | `/api/v1/teams/{teamId}/rtm` | Query franchise RTM card balance & eligibility | All Authenticated |
+
+### ⚡ Accelerated Auction Phase (`/api/v1/auction/accelerated`)
+| Method | Endpoint | Description | Access |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/v1/auction/accelerated/pool` | List unsold & available pool with nomination counts | All Authenticated |
+| `POST` | `/api/v1/auction/accelerated/nominate` | Nominate shortlisted cricketers | Team Owner |
+| `POST` | `/api/v1/auction/accelerated/stage/{id}`| Fast-track nominated cricketer to podium | Admin |
+
+### 📋 BCCI Compliance Auditing (`/api/v1/compliance`)
+| Method | Endpoint | Description | Access |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/v1/compliance/audit` | Macro audit of all 10 franchises | Admin |
+| `GET` | `/api/v1/compliance/teams/{teamId}` | Detailed single franchise compliance breakdown | All Authenticated |
+
+### 📊 Macro Reporting & Analytics (`/api/v1/reports`)
+| Method | Endpoint | Description | Access |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/v1/reports/summary` | Global auction metrics: spend, sold, unsold | All Authenticated |
+| `GET` | `/api/v1/reports/top-buys` | Top 10 most expensive acquisitions | All Authenticated |
+| `GET` | `/api/v1/reports/teams/{teamId}/roster` | Team squad roster & financial breakdown | All Authenticated |
+
+### 📈 Observability & Health (`/actuator`)
+| Method | Endpoint | Description | Access |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/actuator/health` | Spring Boot application health check | Public |
+| `GET` | `/actuator/metrics` | Micrometer auction metrics (`auction.bids.total`, etc.) | Admin |
 
 ---
 
-## 🗄️ Database Architecture & ER Model
-
-Detailed entity relationship specifications and diagrams are documented in [ER_DIAGRAM.md](ER_DIAGRAM.md).
-
-```mermaid
-erDiagram
-    TEAMS ||--o{ TEAM_SQUAD : "owns"
-    TEAMS ||--o{ BIDS : "places"
-    TEAMS ||--o{ WALLET_AUDIT_LOGS : "audited"
-    PLAYERS ||--o{ TEAM_SQUAD : "assigned"
-    PLAYERS ||--o{ BIDS : "bid_on"
-    AUCTIONS ||--o{ BIDS : "contains"
-    AUCTIONS ||--o{ TEAM_SQUAD : "recorded_in"
-    USERS ||--o{ TEAMS : "manages"
-
-    TEAMS {
-        bigint id PK
-        varchar team_name
-        varchar short_code
-        bigint total_purse
-        bigint remaining_purse
-        int max_squad_size
-        int min_squad_size
-        int max_foreign_players
-        int current_squad_count
-        int current_foreign_count
-    }
-
-    PLAYERS {
-        bigint id PK
-        varchar full_name
-        varchar role
-        varchar country
-        boolean is_overseas
-        bigint base_price
-        bigint current_bid_price
-        bigint current_winning_team_id FK
-        varchar status
-        varchar auction_set_category
-    }
-
-    AUCTIONS {
-        bigint id PK
-        varchar title
-        int year
-        varchar status
-        bigint current_player_id FK
-    }
-
-    BIDS {
-        bigint id PK
-        bigint auction_id FK
-        bigint player_id FK
-        bigint team_id FK
-        bigint bid_amount
-        timestamp bid_timestamp
-        varchar bid_status
-    }
-
-    TEAM_SQUAD {
-        bigint id PK
-        bigint team_id FK
-        bigint player_id FK
-        bigint sold_price
-        bigint auction_id FK
-        timestamp acquired_at
-    }
-
-    WALLET_AUDIT_LOGS {
-        bigint id PK
-        bigint team_id FK
-        varchar transaction_type
-        bigint amount
-        bigint balance_before
-        bigint balance_after
-        varchar description
-    }
-```
-
----
-
-## 💻 Tech Stack & Libraries
-
-* **Core Platform**: Java 17, Spring Boot 3.2.3
-* **Persistence & ORM**: Spring Data JPA, Hibernate, MySQL 8.0, Flyway / Liquibase migrations
-* **Security & Auth**: Spring Security 6, JJWT (Java JWT `0.11.5`), BCrypt Password Encoder
-* **Documentation**: Springdoc OpenAPI / Swagger UI 3 (`v3/api-docs`, `/swagger-ui.html`)
-* **Testing**: JUnit 5, Mockito, Spring Boot Test, H2 In-Memory DB (test profile), `CountDownLatch` concurrency stress tests
-* **Frontend UI**: Responsive HTML5, Vanilla CSS3 (Glassmorphism & Neon theme), Modern JavaScript (Fetch API, JWT interceptors)
-
----
-
-## 🚀 Setup & Execution Guide
+## 🚀 Quick Start Guide
 
 ### Prerequisites
-* **Java 17+** (JDK 17 or higher)
-* **Maven 3.8+** (or use included `./mvnw.cmd` wrapper)
-* **MySQL 8.0+** (Optional: H2 in-memory is auto-configured for tests and local fallback)
+* **Java 17 JDK** (Eclipse Temurin, OpenJDK, or Oracle)
+* **Maven 3.8+** (or use included `./mvnw.cmd`)
+* **MySQL 8.0+** (or Docker / Docker Compose)
 
-### 1. Clone the Repository
+### Option A: Run via Docker Compose (Recommended)
 ```bash
+# Clone the repository
 git clone https://github.com/srijansrivastava1234/-ipl-auction-software.git
 cd -ipl-auction-software
-```
 
-### 2. Configure Database
-By default, the application runs against MySQL using `application.yml`:
-```yaml
-spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/ipl_auction_db?useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-    username: root
-    password: root
+# Launch MySQL 8 and Spring Boot backend
+docker-compose up --build
 ```
-*(Or set environment variables `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`).*
+* **Backend API**: `http://localhost:8080`
+* **Swagger UI**: `http://localhost:8080/swagger-ui.html`
 
-### 3. Build the Backend
+### Option B: Run Locally
 ```bash
-# Clean and compile
+# 1. Clean and compile
 ./mvnw.cmd clean compile
 
-# Compile tests
-./mvnw.cmd test-compile
-```
-
-### 4. Run Automated Tests
-```bash
+# 2. Run all 24 unit, concurrency, and integration tests
 ./mvnw.cmd test
 ```
-All **18 automated tests** (Unit tests, Concurrency lock tests, and Week 10 integration tests) will execute with zero failures:
 ```text
 [INFO] Results:
-[INFO] Tests run: 18, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 24, Failures: 0, Errors: 0, Skipped: 0
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
 ```
 
-### 5. Launch the Application
 ```bash
+# 3. Launch Spring Boot application
 ./mvnw.cmd spring-boot:run
 ```
-* **Backend API Base**: `http://localhost:8080`
-* **Swagger UI Documentation**: `http://localhost:8080/swagger-ui.html`
-* **OpenAPI 3 JSON Spec**: `http://localhost:8080/v3/api-docs`
 
-### 6. Launch the Frontend UI
-Simply open `index.html` in any modern web browser or serve via:
+### Launch the Frontend SPA
+Open `index.html` directly in any web browser or serve with:
 ```bash
-# Using Node.js live-server or python http.server
 npx -y serve .
 ```
 
@@ -310,50 +258,54 @@ npx -y serve .
 ```text
 ├── .github/
 │   └── workflows/
-│       └── ci.yml                     # Automated GitHub Actions CI pipeline
+│       └── ci.yml                         # Automated GitHub Actions CI pipeline
 ├── css/
-│   ├── components.css                 # Glassmorphism cards, buttons & modals
-│   ├── style.css                      # Base layout & typography
-│   └── variables.css                  # Dark neon IPL color scheme variables
+│   ├── components.css                     # Glassmorphism cards, buttons & modals
+│   ├── style.css                          # Base layout & typography
+│   └── variables.css                      # Dark neon IPL color scheme variables
 ├── js/
-│   ├── admin-controller.js            # Admin player & franchise onboarding UI
-│   ├── api.js                         # API wrapper with JWT Bearer injection
-│   ├── app.js                         # SPA navigation & tab router
-│   ├── auction-controller.js          # Live bidding podium controls
-│   ├── auth-controller.js             # Login & registration forms
-│   └── squad-controller.js            # Team roster & purse progress bars
+│   ├── admin-controller.js                # Admin player & franchise onboarding UI
+│   ├── api.js                             # API wrapper with JWT Bearer injection
+│   ├── app.js                             # SPA navigation & tab router
+│   ├── auction-controller.js              # Live bidding podium & WebSocket receiver
+│   ├── auth-controller.js                 # Login & registration forms
+│   └── squad-controller.js                # Team roster & purse progress bars
 ├── docs/
-│   ├── MEMBER_1_WEEKS_1_TO_10_WORK.md # Detailed Member 1 weekly sprint logs
-│   ├── member-1-progress.md           # Member 1 milestone audit log
-│   └── team-breakdown-weeks-1-to-10.md# 5-member team scope & roadmap
+│   ├── MEMBER_1_WEEKS_1_TO_12_WORK.md     # Detailed Member 1 complete 12-week sprint log
+│   ├── member-1-progress.md               # Member 1 milestone audit log (100% complete)
+│   ├── team-breakdown-weeks-1-to-12.md    # 5-member team roadmap across all 12 weeks
+│   ├── MEMBER_1_WEEKS_1_TO_10_WORK.md     # Historical sprint log (Weeks 1-10)
+│   └── team-breakdown-weeks-1-to-10.md    # Historical roadmap (Weeks 1-10)
 ├── postman/
 │   ├── IPL_Auction_Collection.postman_collection.json # Automated API test collection
 │   └── IPL_Auction_Environment.postman_environment.json# Environment configurations
 ├── src/
 │   ├── main/
 │   │   ├── java/com/ipl/auction/
-│   │   │   ├── config/                # SecurityConfig, JpaAuditing, OpenApiConfig
-│   │   │   ├── controller/            # REST Controllers (Team, Player, Auction, Bid, RTM, Reports)
-│   │   │   ├── dto/                   # Request & Response Data Transfer Objects
-│   │   │   ├── entity/                # JPA Entities (Team, Player, Bid, Auction, TeamSquad, AuditLog)
-│   │   │   ├── exception/             # Centralized GlobalExceptionHandler & Custom Exceptions
-│   │   │   ├── repository/            # Spring Data JPA Repositories with LockModeType
-│   │   │   ├── security/              # JwtUtils, JwtAuthenticationFilter, UserDetails
-│   │   │   └── service/               # Core business services & validation engines
+│   │   │   ├── config/                    # SecurityConfig, WebSocketConfig, OpenApiConfig
+│   │   │   ├── controller/                # REST & WebSocket Controllers (Team, Player, Timer, etc.)
+│   │   │   ├── dto/                       # Request, Response & WebSocket DTO envelopes
+│   │   │   ├── entity/                    # JPA Entities (Team, Player, Bid, Auction, AuditLog)
+│   │   │   ├── exception/                 # Centralized GlobalExceptionHandler & Custom Exceptions
+│   │   │   ├── repository/                # Spring Data JPA Repositories with LockModeType
+│   │   │   ├── security/                  # JwtUtils, RateLimitingFilter, UserDetails
+│   │   │   └── service/                   # Core business services, AuctionTimerService, Metrics
 │   │   └── resources/
-│   │       ├── application.yml        # Production / MySQL configuration
-│   │       ├── application-test.yml   # H2 in-memory test configuration
-│   │       ├── data.sql               # Seed data (10 IPL teams, 15 marquee players)
-│   │       ├── schema.sql             # MySQL DDL schema
-│   │       └── db/migration/          # Flyway SQL migration scripts
+│   │       ├── application.yml            # Production / MySQL / WebSocket / Actuator config
+│   │       ├── application-test.yml       # H2 in-memory test configuration
+│   │       ├── data.sql                   # Seed data (10 IPL teams, 15 marquee players)
+│   │       ├── schema.sql                 # MySQL DDL schema
+│   │       └── db/migration/              # Flyway SQL migration scripts
 │   └── test/
 │       └── java/com/ipl/auction/
-│           ├── concurrency/           # BiddingEngineConcurrencyTest (multi-threaded)
-│           └── service/               # Unit and Integration test suites (Week 10)
-├── ER_DIAGRAM.md                      # Comprehensive Database ER Specifications
-├── index.html                         # Frontend Single Page Application entry point
-├── pom.xml                            # Maven project configuration & dependencies
-└── README.md                          # Master project documentation
+│           ├── concurrency/               # BiddingEngineConcurrencyTest (multi-threaded)
+│           └── service/                   # Integration test suites (Week 10, Week 11 & 12)
+├── Dockerfile                             # Multi-stage container build (Java 17)
+├── docker-compose.yml                     # Multi-container orchestration (MySQL 8 + Backend)
+├── ER_DIAGRAM.md                          # Comprehensive Database ER Specifications
+├── index.html                             # Frontend Single Page Application entry point
+├── pom.xml                                # Maven project configuration & dependencies
+└── README.md                              # Master project documentation
 ```
 
 ---

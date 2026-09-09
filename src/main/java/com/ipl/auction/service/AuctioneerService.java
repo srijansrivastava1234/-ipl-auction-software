@@ -166,6 +166,11 @@ public class AuctioneerService {
         return mapToSummary(player, null);
     }
 
+    @Transactional
+    public PlayerAuctionSummary strikeHammerUnsold(Long auctionId, Long playerId) {
+        return passPlayerUnsold(auctionId, playerId);
+    }
+
     private PlayerAuctionSummary mapToSummary(Player player, Team team) {
         return PlayerAuctionSummary.builder()
                 .playerId(player.getId())

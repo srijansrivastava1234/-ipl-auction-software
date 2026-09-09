@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  # MySQL 8.0 Database Container
+  mysql-db:
+    image: mysql:8.0
+    container_name: ipl-mysql-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ipl_auction_db
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./src/main/resources/schema.sql:/docker-entrypoint-initdb.d/1_schema.sql:ro
+      - ./src/main/resources/data.sql:/docker-entrypoint-initdb.d/2_data.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ipl-network
+
+  # Spring Boot Backend Service
+  ipl-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ipl-backend-app
+    restart: unless-stopped
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/ipl_auction_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      JWT_SECRET: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+    ports:
+      - "8080:8080"
+    networks:
+      - ipl-network
+
+volumes:
+  mysql-data:
+    driver: local
+
+networks:
+  ipl-network:
+    driver: bridge

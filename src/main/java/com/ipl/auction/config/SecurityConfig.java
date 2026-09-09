@@ -78,7 +78,9 @@ public class SecurityConfig {
                     "/swagger-ui/**",
                     "/swagger-ui.html",
                     "/h2-console/**",
-                    "/favicon.ico"
+                    "/favicon.ico",
+                    "/ws-auction/**",
+                    "/actuator/**"
                 ).permitAll()
                 // Role-specific test endpoints
                 .requestMatchers("/api/v1/test/admin").hasRole("ADMIN")

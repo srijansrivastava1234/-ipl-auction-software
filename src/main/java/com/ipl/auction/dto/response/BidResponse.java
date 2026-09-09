@@ -27,6 +27,10 @@ public class BidResponse {
     private String bidStatus;
     private LocalDateTime bidTimestamp;
 
+    public String getTeamCode() {
+        return teamShortCode;
+    }
+
     public static String formatCurrency(Long amount) {
         if (amount == null) return "₹ 0";
         if (amount >= 10000000) {
