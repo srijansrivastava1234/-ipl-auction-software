@@ -1,0 +1,50 @@
+/* Design System Tokens - IPL Mega Auction 2026 */
+:root {
+    /* Color Palette */
+    --bg-dark: #07090e;
+    --bg-surface: #0f1422;
+    --bg-surface-elevated: #161d30;
+    --bg-glass: rgba(22, 29, 48, 0.7);
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-highlight: rgba(243, 156, 18, 0.3);
+
+    /* Primary IPL Colors */
+    --ipl-navy: #0b132b;
+    --ipl-blue: #1c2541;
+    --ipl-electric-blue: #3a86ff;
+    --ipl-gold: #ffb703;
+    --ipl-gold-glow: rgba(255, 183, 3, 0.3);
+    --ipl-purple: #7209b7;
+
+    /* Functional Colors */
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --info: #3b82f6;
+
+    /* Gradients */
+    --gradient-gold: linear-gradient(135deg, #ffb703 0%, #fb8500 100%);
+    --gradient-primary: linear-gradient(135deg, #3a86ff 0%, #7209b7 100%);
+    --gradient-card: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+
+    /* Typography */
+    --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+    /* Layout Dimensions */
+    --navbar-height: 68px;
+    --sidebar-width: 260px;
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+
+    /* Shadows & Transitions */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+    --glow-gold: 0 0 20px rgba(255, 183, 3, 0.25);
+    --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
