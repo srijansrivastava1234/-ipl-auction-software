@@ -24,4 +24,14 @@ public interface AuthService {
      * Retrieves the profile information for the authenticated user.
      */
     UserProfileResponse getCurrentUserProfile(String username);
+
+    /**
+     * Validates an active JWT token string.
+     */
+    boolean validateToken(String token);
+
+    /**
+     * Terminates the current security context and handles session teardown.
+     */
+    void logout();
 }

@@ -101,4 +101,26 @@ public class JwtUtils {
     public long getExpirationMs() {
         return jwtExpirationMs;
     }
+
+    public Date getExpirationDateFromToken(String token) {
+        return parseClaims(token).getExpiration();
+    }
+
+    public boolean isTokenExpired(String token) {
+        try {
+            Date expiration = getExpirationDateFromToken(token);
+            return expiration.before(new Date());
+        } catch (Exception e) {
+            return true;
+        }
+    }
+
+    public long getRemainingValidityMs(String token) {
+        try {
+            Date expiration = getExpirationDateFromToken(token);
+            return Math.max(0, expiration.getTime() - System.currentTimeMillis());
+        } catch (Exception e) {
+            return 0;
+        }
+    }
 }

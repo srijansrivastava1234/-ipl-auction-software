@@ -68,6 +68,9 @@
 ### 🗓️ Week 10: Production Hardening, Security Audit & Integration Readiness
 - **Audit & Clean Architecture:** Verified that passwords are never returned in responses (`@JsonIgnore` on `UserDetailsImpl.password`).
 - **Configuration Externalization:** Externalized `jwt.secret` and `jwt.expiration-ms` to environment variables in `application.yml` with secure defaults.
+- **Token Freshness & Validation API:** Built `GET /api/v1/auth/validate` powered by `JwtUtils.isTokenExpired` and `getRemainingValidityMs` to support fast client-side session checks.
+- **Session Teardown & Logout API:** Implemented `POST /api/v1/auth/logout` triggering `SecurityContextHolder.clearContext()`.
+- **Route Authorization Hardening:** Enforced explicit matchers segregating public endpoints (`register`, `login`, `validate`) from protected endpoints (`me`, `logout`).
 - **Inter-branch Readiness:** Verified that all routes needed by Member 1 (Teams/Players) and Member 4 (Frontend) can either pass JWT headers or configure role permissions cleanly.
 
 ---
@@ -85,7 +88,9 @@
 |---|---|---|---|
 | `POST` | `/api/v1/auth/register` | None (Public) | 201 Created + JWT token |
 | `POST` | `/api/v1/auth/login` | None (Public) | 200 OK + JWT token |
-| `GET` | `/api/v1/auth/me` | Bearer `<token>` | 200 OK + User Profile |
+| `GET` | `/api/v1/auth/validate?token={jwt}` | None (Public) | 200 OK + `{"valid": true/false}` |
+| `GET` | `/api/v1/auth/me` | Bearer `<token>` | 200 OK + User Profile (401 if No Token) |
+| `POST` | `/api/v1/auth/logout` | Bearer `<token>` | 200 OK + "User logged out successfully" |
 | `GET` | `/api/v1/test/public` | None (Public) | 200 OK |
 | `GET` | `/api/v1/test/admin` | Bearer `<ADMIN_TOKEN>` | 200 OK (403 if TEAM_OWNER, 401 if No Token) |
 | `GET` | `/api/v1/test/owner` | Bearer `<OWNER_TOKEN>` | 200 OK (403 if ADMIN, 401 if No Token) |

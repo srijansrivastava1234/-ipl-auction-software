@@ -143,4 +143,18 @@ public class AuthServiceImpl implements AuthService {
                 .createdAt(user.getCreatedAt())
                 .build();
     }
+
+    @Override
+    public boolean validateToken(String token) {
+        if (token == null || token.isBlank()) {
+            return false;
+        }
+        return jwtUtils.validateJwtToken(token) && !jwtUtils.isTokenExpired(token);
+    }
+
+    @Override
+    public void logout() {
+        log.info("Terminating current user security context");
+        SecurityContextHolder.clearContext();
+    }
 }

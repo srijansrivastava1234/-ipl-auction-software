@@ -5,6 +5,7 @@ import com.ipl.auction.dto.request.RegisterRequest;
 import com.ipl.auction.dto.response.ApiResponse;
 import com.ipl.auction.dto.response.AuthResponse;
 import com.ipl.auction.dto.response.UserProfileResponse;
+import com.ipl.auction.exception.ApiException;
 import com.ipl.auction.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * REST Controller for User Registration, Authentication, and Profile retrieval.
@@ -64,8 +67,37 @@ public class AuthController {
      */
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<UserProfileResponse>> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            throw new ApiException("Authentication required to access user profile", HttpStatus.UNAUTHORIZED);
+        }
         log.info("Fetching profile for current authenticated user: {}", userDetails.getUsername());
         UserProfileResponse profile = authService.getCurrentUserProfile(userDetails.getUsername());
         return ResponseEntity.ok(ApiResponse.success(profile, "User profile fetched successfully"));
+    }
+
+    /**
+     * Validates active JWT token validity and freshness.
+     *
+     * @param token bearer token string
+     * @return ApiResponse indicating validity
+     */
+    @GetMapping("/validate")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> validateToken(@RequestParam("token") String token) {
+        boolean isValid = authService.validateToken(token);
+        return ResponseEntity.ok(ApiResponse.success(
+                Map.of("valid", isValid),
+                isValid ? "Token is valid and active" : "Token is invalid or expired"
+        ));
+    }
+
+    /**
+     * Terminates current authenticated session.
+     *
+     * @return ApiResponse indicating logout success
+     */
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<Void>> logout() {
+        authService.logout();
+        return ResponseEntity.ok(ApiResponse.success(null, "User logged out successfully"));
     }
 }
