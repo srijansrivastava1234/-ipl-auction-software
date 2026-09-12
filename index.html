@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPL Mega Auction 2026 | Management & Bidding Portal</title>
+    <meta name="description" content="Official IPL Mega Auction Portal for Real-time Player Bidding, Team Purse Tracking, and Admin Control.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body class="dark-theme">
+    <!-- Top Navbar -->
+    <header class="navbar" id="main-navbar">
+        <div class="nav-brand">
+            <div class="logo-icon">🏏</div>
+            <div class="logo-text">
+                <span class="brand-title">IPL AUCTION</span>
+                <span class="brand-subtitle">PRO 2026 • WEEKS 1–6.5 MILESTONE</span>
+            </div>
+        </div>
+
+        <div class="nav-status-pills">
+            <div class="status-badge active" id="api-status-badge">
+                <span class="pulse-dot"></span>
+                <span class="status-text" id="api-status-text">Frontend & Interceptors Ready</span>
+            </div>
+            <div class="status-badge gold">
+                <span>🏆 Mega Auction Live Suite</span>
+            </div>
+        </div>
+
+        <div class="nav-user-profile" id="nav-user-section">
+            <div class="user-info">
+                <span class="user-name" id="nav-user-name">Guest User</span>
+                <span class="user-role" id="nav-user-role">Not Authenticated</span>
+            </div>
+            <button class="btn btn-outline btn-sm" id="nav-auth-btn" onclick="navigateTo('login')">Login</button>
+        </div>
+    </header>
+
+    <!-- Main Layout Grid -->
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-label">Navigation Hub</div>
+                <nav class="nav-list">
+                    <a href="#welcome" class="nav-item active" data-page="welcome" onclick="navigateTo('welcome')">
+                        <span class="nav-icon">🏠</span>
+                        <span class="nav-label">Milestone Overview</span>
+                    </a>
+                    <a href="#login" class="nav-item" data-page="login" onclick="navigateTo('login')">
+                        <span class="nav-icon">🔑</span>
+                        <span class="nav-label">Auth - Login</span>
+                    </a>
+                    <a href="#register" class="nav-item" data-page="register" onclick="navigateTo('register')">
+                        <span class="nav-icon">📝</span>
+                        <span class="nav-label">Auth - Register</span>
+                    </a>
+                </nav>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-label">Admin Control (Weeks 3 & 4)</div>
+                <nav class="nav-list">
+                    <a href="#admin" class="nav-item" data-page="admin" onclick="navigateTo('admin')">
+                        <span class="nav-icon">⚙️</span>
+                        <span class="nav-label">Player Management</span>
+                    </a>
+                    <a href="#teams" class="nav-item" data-page="teams" onclick="navigateTo('teams')">
+                        <span class="nav-icon">🏢</span>
+                        <span class="nav-label">Team Franchises</span>
+                    </a>
+                </nav>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-label">Live Auction & Squad (Weeks 5 to 6.5)</div>
+                <nav class="nav-list">
+                    <a href="#auction" class="nav-item" data-page="auction" onclick="navigateTo('auction')">
+                        <span class="nav-icon">🔨</span>
+                        <span class="nav-label">Live Auction Arena</span>
+                    </a>
+                    <a href="#squad" class="nav-item" data-page="squad" onclick="navigateTo('squad')">
+                        <span class="nav-icon">📊</span>
+                        <span class="nav-label">Squad & Purse Tracker</span>
+                    </a>
+                </nav>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="project-tag">
+                    <span class="role-badge">Member 4</span>
+                    <span>Frontend & API Integration Lead</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Dynamic Main Content Area -->
+        <main class="content-container">
+            <!-- PAGE: Milestone Overview -->
+            <section id="page-welcome" class="page-view active">
+                <div class="welcome-hero">
+                    <div class="hero-badge">⚡ Weeks 1 to 6.5 (55% Scope) Completed</div>
+                    <h1 class="hero-title">IPL Auction Software <span class="gradient-text">Complete Frontend Suite</span></h1>
+                    <p class="hero-desc">
+                        Built by <strong>Member 4 (Frontend & API Integration Lead)</strong>. Full UI suite containing JWT Authentication, Admin Player & Franchise Team Management, Real-time Live Bidding Podium with 10s Timer, and Franchise Purse & Squad Analytics.
+                    </p>
+                </div>
+
+                <!-- Status Grid Cards -->
+                <div class="grid-cards">
+                    <div class="card glass-card">
+                        <div class="card-icon">🔐</div>
+                        <h3>Auth & JWT Interceptors</h3>
+                        <p>Login & Registration controllers, JWT token storage, role switcher, and Fetch interceptor with Bearer header injection.</p>
+                        <div class="card-tag tag-success">Weeks 1 & 2 • Complete</div>
+                    </div>
+
+                    <div class="card glass-card">
+                        <div class="card-icon">📋</div>
+                        <h3>Admin Player Registry</h3>
+                        <p>Dynamic Player Registration, category & overseas filtering, live search, and one-click podium dispatch.</p>
+                        <div class="card-tag tag-success">Week 3 • Complete</div>
+                    </div>
+
+                    <div class="card glass-card">
+                        <div class="card-icon">🏢</div>
+                        <h3>Franchise Management</h3>
+                        <p>All 10 IPL Franchises (CSK, MI, RCB, KKR, GT, RR, SRH, LSG, DC, PK) with purse allocation and squad tracking.</p>
+                        <div class="card-tag tag-success">Week 4 • Complete</div>
+                    </div>
+
+                    <div class="card glass-card">
+                        <div class="card-icon">🔨</div>
+                        <h3>Live Bidding Arena</h3>
+                        <p>Interactive bidding (+₹20L, +₹50L, +₹1Cr, custom), 10s countdown timer, budget validator, and hammer down celebration.</p>
+                        <div class="card-tag tag-success">Weeks 5 & 6 • Complete</div>
+                    </div>
+
+                    <div class="card glass-card">
+                        <div class="card-icon">📊</div>
+                        <h3>Squad & Purse Tracker</h3>
+                        <p>Real-time budget tracking (₹120 Cr), spending progress bar, role distribution breakdown, and report export.</p>
+                        <div class="card-tag tag-success">Week 6.5 • Complete</div>
+                    </div>
+                </div>
+
+                <!-- Quick Action Hub -->
+                <div class="card glass-card widget-card">
+                    <div class="widget-header">
+                        <h3>🚀 Interactive Module Launchpad</h3>
+                        <span class="badge-info">Ready for Demonstration</span>
+                    </div>
+                    <p class="widget-desc">Test each module across the Weeks 1–6.5 implementation:</p>
+                    <div class="action-bar">
+                        <button class="btn btn-primary" onclick="navigateTo('login')">🔑 Auth Login</button>
+                        <button class="btn btn-secondary" onclick="navigateTo('admin')">⚙️ Player Registry</button>
+                        <button class="btn btn-secondary" onclick="navigateTo('teams')">🏢 Team Franchises</button>
+                        <button class="btn btn-primary" onclick="navigateTo('auction')">🔨 Live Auction Arena</button>
+                        <button class="btn btn-secondary" onclick="navigateTo('squad')">📊 Squad & Purse</button>
+                        <button class="btn btn-outline" onclick="testApiInterceptor()">🌐 Test API Interceptor</button>
+                    </div>
+
+                    <h4 style="margin-top: 16px; margin-bottom: 8px;">📟 Live API Interceptor Console</h4>
+                    <div class="console-box" id="api-console">
+                        <span class="console-prompt">[Ready] API Interceptor listening for outgoing HTTP requests...</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE: Login UI -->
+            <section id="page-login" class="page-view">
+                <div class="form-container">
+                    <div class="card glass-card">
+                        <div style="text-align: center; margin-bottom: 24px;">
+                            <div style="font-size: 36px; margin-bottom: 8px;">🔑</div>
+                            <h2>Franchise Portal Login</h2>
+                            <p style="color: var(--text-secondary); font-size: 13px;">Login with Franchise Owner or Admin credentials</p>
+                        </div>
+                        <form id="login-form">
+                            <div class="form-group">
+                                <label class="form-label" for="login-username">Username or Franchise ID</label>
+                                <input type="text" id="login-username" class="form-input" placeholder="e.g. csk_owner, mi_admin, or admin" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="login-password">Password</label>
+                                <input type="password" id="login-password" class="form-input" placeholder="••••••••" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Login & Acquire JWT Token</button>
+                        </form>
+                        <div style="margin-top: 20px; text-align: center; font-size: 13px;">
+                            <span style="color: var(--text-muted);">Quick Demo Login:</span>
+                            <button class="btn btn-outline btn-sm" style="margin-top: 8px;" onclick="simulateTokenLogin()">⚡ Auto Login as CSK Owner</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE: Register UI -->
+            <section id="page-register" class="page-view">
+                <div class="form-container">
+                    <div class="card glass-card">
+                        <div style="text-align: center; margin-bottom: 24px;">
+                            <div style="font-size: 36px; margin-bottom: 8px;">📝</div>
+                            <h2>Franchise Team Registration</h2>
+                            <p style="color: var(--text-secondary); font-size: 13px;">Register a new franchise team account</p>
+                        </div>
+                        <form id="register-form">
+                            <div class="form-group">
+                                <label class="form-label" for="reg-team">Franchise Team Name</label>
+                                <input type="text" id="reg-team" class="form-input" placeholder="e.g. Gujarat Titans" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="reg-email">Official Email</label>
+                                <input type="email" id="reg-email" class="form-input" placeholder="owner@gt.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="reg-password">Password</label>
+                                <input type="password" id="reg-password" class="form-input" placeholder="••••••••" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Register Team Account</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE: Admin Player Management UI (Week 3) -->
+            <section id="page-admin" class="page-view">
+                <div class="welcome-hero">
+                    <div class="hero-badge">⚙️ Week 3 Deliverable</div>
+                    <h1 class="hero-title">Player Pool <span class="gradient-text">Management</span></h1>
+                    <p class="hero-desc">Register new players into the auction pool, configure base prices, filter by category/nationality, and send players directly to the Live Auction Podium.</p>
+                </div>
+
+                <!-- Add Player Form Card -->
+                <div class="card glass-card" style="margin-bottom: 24px;">
+                    <h3 style="margin-bottom: 16px;">➕ Register New Player into Auction Pool</h3>
+                    <form id="add-player-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; align-items: end;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" for="player-name">Player Name</label>
+                            <input type="text" id="player-name" class="form-input" placeholder="e.g. Shreyas Iyer" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" for="player-role">Role</label>
+                            <select id="player-role" class="form-select">
+                                <option value="Batter">Batter</option>
+                                <option value="Bowler">Bowler</option>
+                                <option value="All-Rounder">All-Rounder</option>
+                                <option value="Wicket-Keeper">Wicket-Keeper</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" for="player-base-price">Base Price</label>
+                            <select id="player-base-price" class="form-select">
+                                <option value="₹ 2.00 Cr">₹ 2.00 Cr</option>
+                                <option value="₹ 1.50 Cr">₹ 1.50 Cr</option>
+                                <option value="₹ 1.00 Cr">₹ 1.00 Cr</option>
+                                <option value="₹ 50.00 L">₹ 50.00 L</option>
+                                <option value="₹ 20.00 L">₹ 20.00 L</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" for="player-country">Country</label>
+                            <input type="text" id="player-country" class="form-input" placeholder="e.g. India or Australia">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0; padding-bottom: 10px;">
+                            <label class="form-checkbox">
+                                <input type="checkbox" id="player-overseas"> Overseas ✈️
+                            </label>
+                        </div>
+                        <div style="margin-bottom: 0;">
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">➕ Add Player</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Registered Players Data Table with Search & Filters -->
+                <div class="card glass-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                        <h3>🏏 Auction Pool Registry</h3>
+                        <button class="btn btn-outline btn-sm" onclick="AdminController.resetDefaultPool()">🔄 Reset to IPL 2026 Catalog</button>
+                    </div>
+
+                    <!-- Filter Bar -->
+                    <div class="filter-bar">
+                        <input type="text" id="admin-search-player" class="form-input" placeholder="🔍 Search player or country...">
+                        <select id="admin-filter-role" class="form-select">
+                            <option value="ALL">All Roles</option>
+                            <option value="BATTER">Batter</option>
+                            <option value="BOWLER">Bowler</option>
+                            <option value="ALL-ROUNDER">All-Rounder</option>
+                            <option value="WICKET-KEEPER">Wicket-Keeper</option>
+                        </select>
+                        <select id="admin-filter-nationality" class="form-select">
+                            <option value="ALL">All Nationalities</option>
+                            <option value="INDIAN">Indian Players 🇮🇳</option>
+                            <option value="OVERSEAS">Overseas Players ✈️</option>
+                        </select>
+                        <select id="admin-filter-status" class="form-select">
+                            <option value="ALL">All Statuses</option>
+                            <option value="Available">Available</option>
+                            <option value="Active Podium">Active Podium</option>
+                            <option value="Sold">Sold</option>
+                            <option value="Unsold">Unsold</option>
+                        </select>
+                    </div>
+
+                    <div class="data-table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Player Name</th>
+                                    <th>Role</th>
+                                    <th>Nationality</th>
+                                    <th>Base Price</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-player-tbody">
+                                <!-- Rendered dynamically by admin-controller.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE: Admin Team Management UI (Week 4) -->
+            <section id="page-teams" class="page-view">
+                <div class="welcome-hero">
+                    <div class="hero-badge">🏢 Week 4 Deliverable</div>
+                    <h1 class="hero-title">10 IPL Franchises & <span class="gradient-text">Purse Management</span></h1>
+                    <p class="hero-desc">Manage all 10 IPL franchises, configure ₹120 Cr team purse limits, oversee RTM cards, and track squad size constraints.</p>
+                </div>
+
+                <div class="team-cards-grid" id="admin-teams-grid">
+                    <!-- Rendered dynamically by admin-controller.js -->
+                </div>
+            </section>
+
+            <!-- PAGE: Live Auction Room UI (Weeks 5 & 6) -->
+            <section id="page-auction" class="page-view">
+                <div class="welcome-hero">
+                    <div class="hero-badge">🔨 Weeks 5 & 6 Deliverable</div>
+                    <h1 class="hero-title">Real-Time Bidding <span class="gradient-text">Arena</span></h1>
+                    <p class="hero-desc">Live player bidding room with interactive countdown timer, customizable bid increments, franchise budget validation, and hammer down celebration.</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; align-items: start;">
+                    <!-- Active Player Podium Card -->
+                    <div class="card glass-card widget-card">
+                        <div class="widget-header">
+                            <h2>🏏 Active Player on Podium</h2>
+                            <div class="podium-timer-container">
+                                <span style="font-size: 12px; color: var(--text-muted); text-transform: uppercase;">Timer</span>
+                                <div class="timer-circle" id="auction-timer">10s</div>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 24px; align-items: center; margin: 20px 0; flex-wrap: wrap;">
+                            <div style="font-size: 64px; background: rgba(255,183,3,0.1); padding: 16px; border-radius: 50%;">👤</div>
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <h3 style="font-size: 28px; margin: 0;" id="auction-player-name">Virat Kohli</h3>
+                                    <span class="status-badge gold" id="auction-player-set">Set 1 - Marquee</span>
+                                </div>
+                                <p style="color: var(--text-secondary); margin-top: 4px;" id="auction-player-role">India • Batter</p>
+                                <p style="font-size: 13px; color: var(--text-muted);" id="auction-player-stats">Matches: 252 | Runs: 8,004 | SR: 131.9</p>
+                                <p style="margin-top: 6px;">Base Price: <strong style="color: var(--ipl-gold);" id="auction-player-base">₹ 2.00 Cr</strong></p>
+                            </div>
+                            <div style="margin-left: auto; text-align: right; background: rgba(15,23,42,0.9); padding: 16px 24px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                                <div style="font-size: 12px; color: var(--text-muted); text-transform: uppercase;">Highest Bid</div>
+                                <div style="font-size: 36px; font-weight: 800; color: var(--success);" id="auction-current-bid">₹ 14.50 Cr</div>
+                                <div style="font-size: 13px; color: var(--ipl-electric-blue);" id="auction-bidding-team">Held by: Royal Challengers Bengaluru</div>
+                            </div>
+                        </div>
+
+                        <!-- Bidding Team Selector -->
+                        <div class="form-group" style="margin-top: 16px;">
+                            <label class="form-label" for="auction-bidding-franchise-select">Bidding Franchise:</label>
+                            <select id="auction-bidding-franchise-select" class="form-select">
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+
+                        <div class="widget-header" style="margin-top: 16px;">
+                            <h4>🔨 Bidding Increments</h4>
+                            <span class="status-badge gold" id="auction-status-badge">LIVE BIDDING</span>
+                        </div>
+                        <div class="action-bar" style="margin-top: 12px;">
+                            <button class="btn btn-primary" onclick="AuctionController.raiseBid(0.20)">+ ₹ 20 L</button>
+                            <button class="btn btn-primary" onclick="AuctionController.raiseBid(0.50)">+ ₹ 50 L</button>
+                            <button class="btn btn-primary" onclick="AuctionController.raiseBid(1.00)">+ ₹ 1.00 Cr</button>
+                            <button class="btn btn-primary" onclick="AuctionController.raiseBid(2.00)">+ ₹ 2.00 Cr</button>
+                        </div>
+
+                        <!-- Custom Bid Input -->
+                        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px;">
+                            <input type="number" id="auction-custom-bid-input" class="form-input" style="max-width: 200px;" placeholder="Custom Bid (₹ Cr)" step="0.25">
+                            <button class="btn btn-secondary" onclick="AuctionController.submitCustomBid()">Submit Custom Bid</button>
+                        </div>
+
+                        <div class="widget-header">
+                            <h4>⚖️ Auctioneer Actions</h4>
+                        </div>
+                        <div class="action-bar">
+                            <button class="btn btn-success" onclick="AuctionController.markSold()">🔨 SOLD (Hammer Down)</button>
+                            <button class="btn btn-danger" onclick="AuctionController.markUnsold()">❌ UNSOLD</button>
+                            <button class="btn btn-outline" onclick="AuctionController.nextPlayer()">⏩ Next Player</button>
+                        </div>
+                    </div>
+
+                    <!-- Live Bidding Timeline Feed -->
+                    <div class="card glass-card">
+                        <h3 style="margin-bottom: 16px;">📜 Live Bid Stream</h3>
+                        <div class="bid-history-list" id="auction-bid-history">
+                            <!-- Rendered dynamically by auction-controller.js -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE: Squad & Purse Tracker UI (Week 6.5) -->
+            <section id="page-squad" class="page-view">
+                <div class="welcome-hero">
+                    <div class="hero-badge">📊 Week 6.5 Deliverable</div>
+                    <h1 class="hero-title">Franchise Purse & <span class="gradient-text">Squad Tracker</span></h1>
+                    <p class="hero-desc">Real-time financial analytics, squad capacity rules validator (Min 18/Max 25 players, Max 8 overseas), role distribution breakdown, and squad roster export.</p>
+                </div>
+
+                <div class="card glass-card" style="margin-bottom: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                        <h3 id="squad-team-header">Royal Challengers Bengaluru — Financial & Squad Analytics</h3>
+                        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                            <label class="form-label" style="margin: 0;" for="squad-team-select">Select Franchise:</label>
+                            <select id="squad-team-select" class="form-select" style="width: 260px;">
+                                <!-- Populated dynamically -->
+                            </select>
+                            <button class="btn btn-outline btn-sm" onclick="SquadController.exportSquadReport()">📥 Export Roster (JSON)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-cards">
+                    <div class="card glass-card">
+                        <div class="card-icon">💰</div>
+                        <h3>Remaining Purse</h3>
+                        <div style="font-size: 32px; font-weight: 800; color: var(--ipl-gold); margin: 8px 0;" id="squad-remaining-purse">₹ 42.50 Cr</div>
+                        <p id="squad-spent-purse">Total Spent: ₹ 77.50 Cr / 120.00 Cr</p>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" id="squad-purse-bar" style="width: 65%;"></div>
+                        </div>
+                    </div>
+                    <div class="card glass-card">
+                        <div class="card-icon">👥</div>
+                        <h3>Squad Capacity</h3>
+                        <div style="font-size: 32px; font-weight: 800; color: var(--ipl-electric-blue); margin: 8px 0;" id="squad-player-count">16 / 25</div>
+                        <p>Min Required: 18 | Max Allowed: 25</p>
+                        <div class="role-pills-row" id="squad-role-breakdown">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                    <div class="card glass-card">
+                        <div class="card-icon">✈️</div>
+                        <h3>Overseas Players</h3>
+                        <div style="font-size: 32px; font-weight: 800; color: var(--success); margin: 8px 0;" id="squad-overseas-count">5 / 8</div>
+                        <p>Quota Cap: Maximum 8 Overseas</p>
+                    </div>
+                </div>
+
+                <!-- Full Team Squad Roster Data Table -->
+                <div class="card glass-card">
+                    <h3 style="margin-bottom: 16px;">📋 Acquired Squad Roster</h3>
+                    <div class="data-table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Player Name</th>
+                                    <th>Role</th>
+                                    <th>Nationality</th>
+                                    <th>Acquisition Price</th>
+                                </tr>
+                            </thead>
+                            <tbody id="squad-roster-tbody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- SOLD Celebration Modal / Banner Overlay -->
+    <div class="sold-celebration-overlay" id="sold-celebration-overlay" style="display: none;" onclick="AuctionController.closeCelebrationModal()">
+        <div class="sold-celebration-box" onclick="event.stopPropagation()">
+            <div style="font-size: 56px; margin-bottom: 12px;">🔨🎉</div>
+            <div class="sold-title">HAMMER DOWN!</div>
+            <h2 id="sold-player-name-banner" style="font-size: 26px; margin-bottom: 12px;">Virat Kohli</h2>
+            <p id="sold-player-desc-banner" style="font-size: 16px; margin-bottom: 24px;">SOLD to Royal Challengers Bengaluru for ₹ 14.50 Cr</p>
+            <button class="btn btn-primary btn-lg" onclick="AuctionController.closeCelebrationModal()">Continue Auction 🏏</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/auth-controller.js"></script>
+    <script src="js/admin-controller.js"></script>
+    <script src="js/auction-controller.js"></script>
+    <script src="js/squad-controller.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
