@@ -1,0 +1,661 @@
+openapi: 3.0.1
+info:
+  title: IPL Auction System API
+  version: 1.0.0
+  description: |
+    **IPL Player Auction Management System** — Complete REST API.
+
+    ### Features
+    - 🏏 **Team Management** — Register, update, and manage IPL franchise teams
+    - 👤 **Player Management** — Add, search, and manage player profiles
+    - 💰 **Live Auction** — Real-time bidding engine with purse management
+    - 🔐 **Authentication** — JWT-based secure access with role-based authorization
+
+    ### Authentication
+    All protected endpoints require a valid JWT token.
+    Use the `/api/auth/login` endpoint to obtain a token, then include it as:
+    `Authorization: Bearer <your-token>`
+  contact:
+    name: IPL Auction Development Team
+    email: team@ipl-auction.dev
+    url: https://github.com/ipl-auction-team/ipl-auction-system
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:8080
+    description: 🖥️ Local Development Server
+  - url: https://staging-api.ipl-auction.dev
+    description: 🧪 Staging Server
+  - url: https://api.ipl-auction.dev
+    description: 🚀 Production Server
+
+security:
+  - BearerAuthentication: []
+
+tags:
+  - name: Authentication
+    description: 🔐 User registration, login, and JWT token management
+  - name: Teams
+    description: 🏏 IPL franchise team CRUD operations and purse management
+  - name: Players
+    description: 👤 Player registration, search, and profile management
+  - name: Auction
+    description: 💰 Live auction session management and bidding operations
+
+paths:
+  # ═══════════════════════════════════════════
+  # AUTHENTICATION
+  # ═══════════════════════════════════════════
+
+  /api/auth/register:
+    post:
+      tags: [Authentication]
+      summary: Register a new user
+      description: Creates a new user account with the specified role (USER or ADMIN).
+      operationId: registerUser
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '400':
+          description: Invalid input (weak password, invalid email)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Username or email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/login:
+    post:
+      tags: [Authentication]
+      summary: Login and obtain JWT token
+      description: Authenticates user and returns a JWT Bearer token for API access.
+      operationId: loginUser
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+      responses:
+        '200':
+          description: Login successful — JWT token returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ═══════════════════════════════════════════
+  # TEAMS
+  # ═══════════════════════════════════════════
+
+  /api/teams:
+    get:
+      tags: [Teams]
+      summary: Get all teams
+      description: Returns a list of all registered IPL franchise teams.
+      operationId: getAllTeams
+      responses:
+        '200':
+          description: List of teams
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TeamResponse'
+        '401':
+          description: Unauthorized — missing or invalid token
+
+    post:
+      tags: [Teams]
+      summary: Register a new team
+      description: Creates a new IPL franchise team with the given details and purse amount.
+      operationId: createTeam
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeamRequest'
+      responses:
+        '201':
+          description: Team created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamResponse'
+        '400':
+          description: Invalid input
+        '409':
+          description: Team name already exists
+
+  /api/teams/{id}:
+    get:
+      tags: [Teams]
+      summary: Get team by ID
+      operationId: getTeamById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Team details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamResponse'
+        '404':
+          description: Team not found
+
+    put:
+      tags: [Teams]
+      summary: Update team details
+      operationId: updateTeam
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeamRequest'
+      responses:
+        '200':
+          description: Team updated
+        '404':
+          description: Team not found
+
+    delete:
+      tags: [Teams]
+      summary: Delete a team
+      operationId: deleteTeam
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Team deleted
+        '404':
+          description: Team not found
+
+  # ═══════════════════════════════════════════
+  # PLAYERS
+  # ═══════════════════════════════════════════
+
+  /api/players:
+    get:
+      tags: [Players]
+      summary: Get all players (with optional filters)
+      operationId: getAllPlayers
+      parameters:
+        - name: role
+          in: query
+          schema:
+            type: string
+            enum: [BATSMAN, BOWLER, ALLROUNDER, WICKETKEEPER]
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [UNSOLD, SOLD, WITHDRAWN]
+        - name: country
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of players
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlayerResponse'
+
+    post:
+      tags: [Players]
+      summary: Register a new player
+      operationId: createPlayer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlayerRequest'
+      responses:
+        '201':
+          description: Player created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerResponse'
+        '400':
+          description: Invalid input
+        '409':
+          description: Player name already exists
+
+  /api/players/{id}:
+    get:
+      tags: [Players]
+      summary: Get player by ID
+      operationId: getPlayerById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Player details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerResponse'
+        '404':
+          description: Player not found
+
+    put:
+      tags: [Players]
+      summary: Update player details
+      operationId: updatePlayer
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlayerRequest'
+      responses:
+        '200':
+          description: Player updated
+        '404':
+          description: Player not found
+
+    delete:
+      tags: [Players]
+      summary: Delete a player
+      operationId: deletePlayer
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Player deleted
+        '404':
+          description: Player not found
+
+  # ═══════════════════════════════════════════
+  # AUCTION & BIDDING
+  # ═══════════════════════════════════════════
+
+  /api/auction/start:
+    post:
+      tags: [Auction]
+      summary: Start a new auction session
+      operationId: startAuction
+      responses:
+        '200':
+          description: Auction started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuctionSessionResponse'
+        '409':
+          description: An auction is already active
+
+  /api/auction/stop:
+    post:
+      tags: [Auction]
+      summary: Stop the current auction session
+      operationId: stopAuction
+      responses:
+        '200':
+          description: Auction stopped
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuctionSessionResponse'
+        '400':
+          description: No active auction to stop
+
+  /api/auction/bid:
+    post:
+      tags: [Auction]
+      summary: Place a bid on a player
+      operationId: placeBid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BidRequest'
+      responses:
+        '200':
+          description: Bid placed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BidResponse'
+        '400':
+          description: Invalid bid (below base, exceeds purse, no active auction)
+        '404':
+          description: Team or player not found
+        '409':
+          description: Player already sold
+
+  /api/auction/status:
+    get:
+      tags: [Auction]
+      summary: Get current auction session status
+      operationId: getAuctionStatus
+      responses:
+        '200':
+          description: Current auction status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuctionSessionResponse'
+
+  /api/auction/bids/{playerId}:
+    get:
+      tags: [Auction]
+      summary: Get bid history for a player
+      operationId: getBidHistory
+      parameters:
+        - name: playerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Bid history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BidResponse'
+
+components:
+  securitySchemes:
+    BearerAuthentication:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Enter your JWT token obtained from `/api/auth/login`
+
+  schemas:
+    RegisterRequest:
+      type: object
+      required: [username, password, email, role]
+      properties:
+        username:
+          type: string
+          minLength: 3
+          example: admin
+        password:
+          type: string
+          minLength: 8
+          example: SecureP@ss123
+        email:
+          type: string
+          format: email
+          example: admin@ipl-auction.dev
+        role:
+          type: string
+          enum: [ADMIN, USER]
+          example: ADMIN
+
+    AuthRequest:
+      type: object
+      required: [username, password]
+      properties:
+        username:
+          type: string
+          example: admin
+        password:
+          type: string
+          example: SecureP@ss123
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiJ9...
+        tokenType:
+          type: string
+          example: Bearer
+        expiresIn:
+          type: integer
+          format: int64
+          example: 86400000
+
+    MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: User registered successfully
+
+    TeamRequest:
+      type: object
+      required: [name, city, owner, maxPurse]
+      properties:
+        name:
+          type: string
+          example: Mumbai Indians
+        city:
+          type: string
+          example: Mumbai
+        owner:
+          type: string
+          example: Nita Ambani
+        logoUrl:
+          type: string
+          example: https://example.com/mi-logo.png
+        maxPurse:
+          type: number
+          format: decimal
+          example: 1000000000
+
+    TeamResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        city:
+          type: string
+        owner:
+          type: string
+        logoUrl:
+          type: string
+        purseRemaining:
+          type: number
+          format: decimal
+        maxPurse:
+          type: number
+          format: decimal
+        createdAt:
+          type: string
+          format: date-time
+
+    PlayerRequest:
+      type: object
+      required: [name, age, role, country, basePrice]
+      properties:
+        name:
+          type: string
+          example: Virat Kohli
+        age:
+          type: integer
+          example: 35
+        role:
+          type: string
+          enum: [BATSMAN, BOWLER, ALLROUNDER, WICKETKEEPER]
+          example: BATSMAN
+        country:
+          type: string
+          example: India
+        basePrice:
+          type: number
+          format: decimal
+          example: 200000000
+
+    PlayerResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        age:
+          type: integer
+        role:
+          type: string
+          enum: [BATSMAN, BOWLER, ALLROUNDER, WICKETKEEPER]
+        country:
+          type: string
+        basePrice:
+          type: number
+          format: decimal
+        soldPrice:
+          type: number
+          format: decimal
+          nullable: true
+        status:
+          type: string
+          enum: [UNSOLD, SOLD, WITHDRAWN]
+        teamName:
+          type: string
+          nullable: true
+
+    BidRequest:
+      type: object
+      required: [teamId, playerId, amount]
+      properties:
+        teamId:
+          type: integer
+          format: int64
+          example: 1
+        playerId:
+          type: integer
+          format: int64
+          example: 1
+        amount:
+          type: number
+          format: decimal
+          example: 250000000
+
+    BidResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        teamId:
+          type: integer
+          format: int64
+        teamName:
+          type: string
+        playerId:
+          type: integer
+          format: int64
+        playerName:
+          type: string
+        amount:
+          type: number
+          format: decimal
+        timestamp:
+          type: string
+          format: date-time
+
+    AuctionSessionResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum: [ACTIVE, PAUSED, COMPLETED]
+        round:
+          type: integer
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+          nullable: true
+
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        errors:
+          type: array
+          items:
+            type: string
