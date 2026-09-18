@@ -1,0 +1,152 @@
+# ==============================================================================
+# IPL Auction System — Complete 3-Stage CI/CD Pipeline
+# Member 5 Deliverable: QA, Testing & API Documentation Lead
+# ==============================================================================
+# NOTE: This is the comprehensive CI pipeline designed for the project.
+# To activate the multi-stage pipeline, grant the 'workflow' scope to your PAT
+# or configure repository secrets and copy this file to .github/workflows/ci.yml.
+# ==============================================================================
+
+name: IPL Auction System - CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - 'feature/**'
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  JAVA_VERSION: '17'
+  JAVA_DISTRIBUTION: 'temurin'
+  NODE_VERSION: '20'
+
+jobs:
+  # ============================================================================
+  # STAGE 1: Build & Automated Test Execution (JUnit 5 + Mockito)
+  # ============================================================================
+  build-and-test:
+    name: Build & Run Test Suite (132 Tests)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: ☕ Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+          cache: maven
+
+      - name: 🔨 Compile Application
+        run: mvn clean compile -B
+
+      - name: 🧪 Execute Unit & Edge-Case Tests (Surefire)
+        run: mvn test -B -Dtest="com.ipl.auction.unit.**,com.ipl.auction.edge.**"
+
+      - name: 🔗 Execute Integration Tests (Failsafe)
+        run: mvn test -B -Dtest="com.ipl.auction.integration.**"
+
+      - name: 📊 Generate JaCoCo Code Coverage Report
+        run: mvn jacoco:report -B
+        continue-on-error: true
+
+      - name: 📤 Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-test-reports
+          path: target/surefire-reports/
+          retention-days: 14
+
+      - name: 📤 Upload JaCoCo Coverage Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-coverage-report
+          path: target/site/jacoco/
+          retention-days: 14
+
+  # ============================================================================
+  # STAGE 2: Postman API Automation via Newman CLI
+  # ============================================================================
+  postman-newman:
+    name: Postman API Automation (Newman)
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: 📦 Install Newman & HTML Reporter
+        run: npm install -g newman newman-reporter-htmlextra
+
+      - name: 🚀 Validate Postman Collection JSON Schema
+        run: |
+          node -e "
+            const fs = require('fs');
+            const col = JSON.parse(fs.readFileSync('postman/IPL_Auction_API.postman_collection.json', 'utf8'));
+            console.log('✅ Collection Name:', col.info.name);
+            console.log('✅ Total Folders:', col.item.length);
+            const totalRequests = col.item.reduce((acc, folder) => acc + (folder.item ? folder.item.length : 1), 0);
+            console.log('✅ Total Requests:', totalRequests);
+            if (totalRequests < 20) throw new Error('Incomplete Postman collection!');
+          "
+
+      - name: 🧪 Run Newman against CI Mock Environment
+        run: |
+          newman run postman/IPL_Auction_API.postman_collection.json \
+            -e postman/IPL_Auction_CI.postman_environment.json \
+            --reporters cli,htmlextra \
+            --reporter-htmlextra-export newman/report.html \
+            --suppress-exit-code 0
+        continue-on-error: true
+
+      - name: 📤 Upload Newman Test Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-html-report
+          path: newman/
+          retention-days: 14
+
+  # ============================================================================
+  # STAGE 3: OpenAPI / Swagger Specification Validation
+  # ============================================================================
+  swagger-validate:
+    name: OpenAPI Spec Validation (Redocly)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: 🔍 Lint & Validate OpenAPI 3.0 Specification
+        run: npx @redocly/cli lint docs/openapi-spec.yaml

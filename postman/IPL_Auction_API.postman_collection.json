@@ -1,0 +1,856 @@
+{
+	"info": {
+		"_postman_id": "ipl-auction-api-collection",
+		"name": "IPL Auction System API",
+		"description": "Complete API collection for IPL Auction System — Member 5 Deliverable.\n\nIncludes all CRUD endpoints, authentication flow, auction bidding, and edge-case tests.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwt_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "{{base_url}}"
+		}
+	],
+	"item": [
+		{
+			"name": "🔐 Authentication",
+			"description": "User registration, login, and JWT token management",
+			"item": [
+				{
+					"name": "Register Admin User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Response contains success message', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message).to.include('registered');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"SecureP@ss123\",\n    \"email\": \"admin@ipl-auction.dev\",\n    \"role\": \"ADMIN\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Login — Get JWT Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response contains JWT token', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('token');",
+									"    pm.expect(jsonData.token).to.be.a('string');",
+									"    pm.expect(jsonData.tokenType).to.eql('Bearer');",
+									"});",
+									"",
+									"// Auto-save token to environment variable",
+									"var jsonData = pm.response.json();",
+									"pm.environment.set('jwt_token', jsonData.token);",
+									"console.log('JWT Token saved to environment');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"SecureP@ss123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Login — Invalid Credentials (401)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 401', function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"WrongPassword\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "login"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🏏 Teams",
+			"description": "IPL franchise team CRUD operations",
+			"item": [
+				{
+					"name": "Create Team — Mumbai Indians",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Team has correct name', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.name).to.eql('Mumbai Indians');",
+									"});",
+									"",
+									"pm.test('Team has purse remaining', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.purseRemaining).to.be.above(0);",
+									"});",
+									"",
+									"// Save team ID for later use",
+									"var jsonData = pm.response.json();",
+									"pm.environment.set('team_id', jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Mumbai Indians\",\n    \"city\": \"Mumbai\",\n    \"owner\": \"Nita Ambani\",\n    \"logoUrl\": \"https://example.com/mi-logo.png\",\n    \"maxPurse\": 1000000000\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/teams",
+							"host": ["{{base_url}}"],
+							"path": ["api", "teams"]
+						}
+					}
+				},
+				{
+					"name": "Get All Teams",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response is an array', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/teams",
+							"host": ["{{base_url}}"],
+							"path": ["api", "teams"]
+						}
+					}
+				},
+				{
+					"name": "Get Team by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has team fields', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('id');",
+									"    pm.expect(jsonData).to.have.property('name');",
+									"    pm.expect(jsonData).to.have.property('city');",
+									"    pm.expect(jsonData).to.have.property('purseRemaining');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/teams/{{team_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "teams", "{{team_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Update Team",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Mumbai Indians\",\n    \"city\": \"Navi Mumbai\",\n    \"owner\": \"Nita Ambani\",\n    \"maxPurse\": 1000000000\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/teams/{{team_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "teams", "{{team_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Get Team — Invalid ID (404)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 404', function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/teams/99999",
+							"host": ["{{base_url}}"],
+							"path": ["api", "teams", "99999"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "👤 Players",
+			"description": "Player registration and management",
+			"item": [
+				{
+					"name": "Create Player — Virat Kohli",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Player has correct details', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.name).to.eql('Virat Kohli');",
+									"    pm.expect(jsonData.role).to.eql('BATSMAN');",
+									"    pm.expect(jsonData.status).to.eql('UNSOLD');",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.environment.set('player_id', jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Virat Kohli\",\n    \"age\": 35,\n    \"role\": \"BATSMAN\",\n    \"country\": \"India\",\n    \"basePrice\": 200000000\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/players",
+							"host": ["{{base_url}}"],
+							"path": ["api", "players"]
+						}
+					}
+				},
+				{
+					"name": "Get All Players",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response is an array', function () {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/players",
+							"host": ["{{base_url}}"],
+							"path": ["api", "players"]
+						}
+					}
+				},
+				{
+					"name": "Get Players by Role (BATSMAN)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('All returned players are batsmen', function () {",
+									"    var jsonData = pm.response.json();",
+									"    jsonData.forEach(function(player) {",
+									"        pm.expect(player.role).to.eql('BATSMAN');",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/players?role=BATSMAN",
+							"host": ["{{base_url}}"],
+							"path": ["api", "players"],
+							"query": [
+								{
+									"key": "role",
+									"value": "BATSMAN"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Player by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has player fields', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('id');",
+									"    pm.expect(jsonData).to.have.property('name');",
+									"    pm.expect(jsonData).to.have.property('role');",
+									"    pm.expect(jsonData).to.have.property('basePrice');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/players/{{player_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "players", "{{player_id}}"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "💰 Auction & Bidding",
+			"description": "Live auction session management and bid operations",
+			"item": [
+				{
+					"name": "Start Auction Session",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Auction is ACTIVE', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql('ACTIVE');",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.environment.set('auction_id', jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "{{base_url}}/api/auction/start",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auction", "start"]
+						}
+					}
+				},
+				{
+					"name": "Place Bid — ₹25 Cr",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Bid has expected fields', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('teamId');",
+									"    pm.expect(jsonData).to.have.property('playerId');",
+									"    pm.expect(jsonData).to.have.property('amount');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"teamId\": {{team_id}},\n    \"playerId\": {{player_id}},\n    \"amount\": 250000000\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auction/bid",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auction", "bid"]
+						}
+					}
+				},
+				{
+					"name": "Get Bid History for Player",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response is an array', function () {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/auction/bids/{{player_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auction", "bids", "{{player_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Get Auction Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Auction status field exists', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('status');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/auction/status",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auction", "status"]
+						}
+					}
+				},
+				{
+					"name": "Stop Auction Session",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Auction is COMPLETED', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql('COMPLETED');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "{{base_url}}/api/auction/stop",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auction", "stop"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🛑 Edge Cases",
+			"description": "Tests for error handling, validation, and security boundaries",
+			"item": [
+				{
+					"name": "Bid Below Base Price (400)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"pm.test('Error mentions base price', function () {",
+									"    pm.expect(pm.response.text()).to.include('base price');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"teamId\": {{team_id}},\n    \"playerId\": {{player_id}},\n    \"amount\": 1000\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auction/bid",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auction", "bid"]
+						}
+					}
+				},
+				{
+					"name": "Bid Exceeding Purse (400)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"pm.test('Error mentions purse', function () {",
+									"    pm.expect(pm.response.text()).to.include('purse');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"teamId\": {{team_id}},\n    \"playerId\": {{player_id}},\n    \"amount\": 99999999999\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auction/bid",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auction", "bid"]
+						}
+					}
+				},
+				{
+					"name": "Access Without Token (401)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 401', function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/teams",
+							"host": ["{{base_url}}"],
+							"path": ["api", "teams"]
+						}
+					}
+				},
+				{
+					"name": "Non-Existent Player ID (404)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 404', function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/players/99999",
+							"host": ["{{base_url}}"],
+							"path": ["api", "players", "99999"]
+						}
+					}
+				},
+				{
+					"name": "Duplicate Team Creation (409)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 409', function () {",
+									"    pm.response.to.have.status(409);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Mumbai Indians\",\n    \"city\": \"Mumbai\",\n    \"owner\": \"Duplicate\",\n    \"maxPurse\": 1000000000\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/teams",
+							"host": ["{{base_url}}"],
+							"path": ["api", "teams"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "📊 Swagger Docs",
+			"description": "Verify API documentation endpoints",
+			"item": [
+				{
+					"name": "OpenAPI JSON Spec",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Contains OpenAPI version', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.openapi).to.include('3.');",
+									"});",
+									"",
+									"pm.test('Contains API title', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.info.title).to.include('IPL');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/v3/api-docs",
+							"host": ["{{base_url}}"],
+							"path": ["v3", "api-docs"]
+						}
+					}
+				},
+				{
+					"name": "Swagger UI Page",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Contains Swagger UI HTML', function () {",
+									"    pm.expect(pm.response.text()).to.include('swagger');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/swagger-ui.html",
+							"host": ["{{base_url}}"],
+							"path": ["swagger-ui.html"]
+						}
+					}
+				}
+			]
+		}
+	]
+}
