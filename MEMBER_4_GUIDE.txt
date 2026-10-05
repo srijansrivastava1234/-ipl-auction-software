@@ -1,0 +1,187 @@
+================================================================================
+🏏 IPL AUCTION SYSTEM — MEMBER 4 WORK GUIDE & ROLE BLUEPRINT
+================================================================================
+ROLE:       Frontend & API Integration Lead
+BRANCH:     feature/frontend-ui
+WORKSPACE:  team/member-4-frontend-api-integration-lead
+PORT:       http://localhost:5173 (Vite Dev Server)
+================================================================================
+
+1. WHO YOU ARE & WHAT YOU DO (IN SIMPLE WORDS)
+--------------------------------------------------------------------------------
+You are the Lead Visual Designer, UI/UX Architect & Frontend Engineer of the platform.
+Your mission is to construct the high-octane Cybernetic Dark Stadium web experience, 
+the circular Orbit Arena displaying all 10 IPL franchises, the interactive live 
+Bidding Console with instant increment buttons (+₹20L, +₹50L, +₹1 Cr), the live 
+Leaderboard tracking purse balances and squad limits, the Admin/Owner Login switcher, 
+and handle full REST & WebSocket integration with Member 2 and Member 3's backend.
+
+
+2. WHAT YOU OWN VS STRICT BOUNDARIES
+--------------------------------------------------------------------------------
+✅ WHAT YOU OWN (YOUR RESPONSIBILITY):
+- React SPA architecture with Vite (src/App.jsx, main.jsx, package.json).
+- Cybernetic Dark Cricket Design System & Glassmorphism styling (src/index.css, App.css).
+- Circular Orbit Arena stadium visualization (src/components/OrbitArena.jsx).
+- Real-time Bidding Console with increment triggers (src/components/BiddingConsole.jsx).
+- Active Player Spotlight Card with badges & timer (src/components/PlayerCard.jsx).
+- Live Franchise Leaderboard & Purse tracker (src/components/Leaderboard.jsx).
+- Top Franchise Navigation Header (src/components/FranchiseHeader.jsx).
+- 1-Click Role Switcher & Login Modal (src/components/Login.jsx).
+- Admin Add Player Modal (src/components/AddPlayerModal.jsx).
+- Franchise branding themes & player analytics data (src/teamThemes.js, playerAnalytics.js).
+
+⛔ WHAT YOU MUST NEVER TOUCH (HANDLED BY OTHERS):
+- Member 1's Domain: Spring Boot backend controllers, squad limit Java validations.
+- Member 2's Domain: Java Spring Security filter chains, JWT TokenUtil generation logic.
+- Member 3's Domain: MySQL schema scripts, Docker containers, JPA Pessimistic Locks.
+- Member 5's Domain: JUnit 5 test suites, Mockito test mocks, GitHub Actions CI.
+
+
+3. TOOLS & TECH STACK YOU USE
+--------------------------------------------------------------------------------
+- React 18 / 19: Component-based UI library with hooks (useState, useEffect, useMemo, useRef).
+- Vite: Next-generation fast frontend tooling and development server.
+- Vanilla Modern CSS: Custom CSS variables, glassmorphism, radial positioning, keyframes.
+- Axios: HTTP client with request interceptors attaching JWT Bearer headers.
+- StompJS & SockJS: WebSocket client libraries for real-time live bid streams.
+- Node.js & npm: Frontend dependency and script manager (package.json).
+
+
+4. YOUR EXACT CODE FILES & WHAT THEY DO
+--------------------------------------------------------------------------------
+📍 src/App.jsx
+   - Main dashboard conductor:
+     1. Manages global state: logged-in user, active player, all players list, all teams list, bids.
+     2. Connects to backend REST APIs and polling / WebSocket updates.
+     3. Toggles between Auctioneer Admin mode and Franchise Team Owner mode.
+     4. Renders header, player card, orbit arena, bidding console, and leaderboard.
+
+📍 src/index.css & src/App.css
+   - The Cybernetic Dark Stadium Design System:
+     1. Uses dark carbon hues (#0a0e17, #111827) with luminous neon gold, cyan, and crimson accents.
+     2. Custom glassmorphism card panels (backdrop-filter: blur(16px)).
+     3. Radial positioning calculations for circular Orbit Arena.
+     4. High-visibility badges for Overseas (✈️) and Player Roles.
+
+📍 src/components/OrbitArena.jsx
+   - The signature visual element of the system:
+     1. Dynamically places all 10 IPL team logos in a circular orbit ring around the active player.
+     2. Detects which franchise holds the leading bid and triggers a high-intensity glowing neon halo.
+
+📍 src/components/BiddingConsole.jsx
+   - The interactive bidder control pad:
+     1. Provides rapid bid buttons: +₹20 Lakhs, +₹50 Lakhs, +₹1 Crore.
+     2. Custom manual bid entry with instant balance check.
+     3. Visual purse health indicator showing remaining budget before and after bidding.
+     4. Prevents duplicate consecutive clicks by the same franchise.
+
+📍 src/components/PlayerCard.jsx
+   - Centerpiece card presenting:
+     1. High-resolution player photo and country flag.
+     2. Role badge (Batsman, Bowler, All-Rounder, Wicket-Keeper).
+     3. Base Price vs Current Highest Bid display.
+     4. Live countdown timer for active auction rounds.
+
+📍 src/components/Leaderboard.jsx
+   - Real-time squad and purse audit table:
+     1. Displays all 10 franchises sorted by budget or squad size.
+     2. Visual progress bars for 25-player maximum capacity and 8-overseas maximum limit.
+     3. Alerts when a franchise approaches budget exhaustion.
+
+📍 src/components/Login.jsx
+   - Authentication modal featuring 1-click quick-switch presets for Admin and all 10 Team Owners.
+   - Stores authenticated JWT token and user info into localStorage.
+
+📍 src/components/FranchiseHeader.jsx
+   - Top stadium navigation bar displaying active team insignia, remaining purse, and user role.
+
+📍 src/teamThemes.js & src/playerAnalytics.js
+   - Official brand palettes, shortcodes, and player career performance stats.
+
+
+5. YOUR PACKAGE.JSON DEPENDENCIES (EXPLAINED SIMPLY)
+--------------------------------------------------------------------------------
+1. react & react-dom:
+   Powers declarative component rendering and reactive state updates.
+2. axios:
+   Sends REST HTTP calls to backend (/api/auth/login, /api/players, /api/bids).
+3. sockjs-client & stompjs:
+   Connects to Spring Boot's WebSocket STOMP broker (/ws-auction) for zero-latency live updates.
+4. vite & @vitejs/plugin-react:
+   Ultra-fast local dev server with Hot Module Replacement (HMR) and production bundler.
+
+
+6. HOW TO RUN & VERIFY YOUR WORK LOCALLY
+--------------------------------------------------------------------------------
+1. Open terminal inside your folder:
+   cd team/member-4-frontend-api-integration-lead
+
+2. Install Node dependencies:
+   npm install
+
+3. Start the Vite development server:
+   npm run dev
+
+4. Open your browser:
+   http://localhost:5173
+
+5. Verify features:
+   - Click "Login" -> Select "Chennai Super Kings" or "Auctioneer Admin".
+   - Click Quick-Bid increment buttons (+₹20L, +₹50L, +₹1 Cr).
+   - Observe Orbit Arena pulsating around the active team.
+
+
+7. GIT COMMANDS YOU NEED TO RUN
+--------------------------------------------------------------------------------
+# Switch to develop and branch out:
+git checkout develop
+git checkout -b feature/frontend-ui
+
+# Check modified files:
+git status
+
+# Stage your files:
+git add src/ package.json index.html MEMBER_4_GUIDE.txt
+
+# Commit your changes:
+git commit -m "feat(ui): implement Cybernetic Dark theme, OrbitArena, BiddingConsole, and Leaderboard"
+
+# Push to remote repository:
+git push origin feature/frontend-ui
+
+
+8. EXACT WORDS TO SAY TO YOUR MENTOR (PRESENTATION SCRIPT)
+--------------------------------------------------------------------------------
+"Hello Sir. As Member 4 and Frontend & API Integration Lead:
+1. I developed our Single Page Application using React 18/19 and Vite on http://localhost:5173.
+2. I engineered a custom Cybernetic Dark Cricket Stadium Design System in index.css featuring glassmorphism, responsive grid layouts, and team-tailored neon glow palettes.
+3. I invented the circular Orbit Arena component, which renders all 10 IPL franchises in a radial stadium orbit around the active player and pulses the leading franchise badge in real-time.
+4. I built the Bidding Console with rapid one-click increment triggers (+₹20L, +₹50L, +₹1 Cr) and integrated Axios with JWT Bearer tokens to communicate securely with Member 2 and Member 3's backend services."
+
+
+9. TOP MENTOR QUESTIONS & HOW TO ANSWER CONFIDENTLY
+--------------------------------------------------------------------------------
+Q1: Where is the JWT token stored and how is it attached to API requests?
+Ans: When a user logs in via Login.jsx, the backend returns a signed JWT token which 
+     we store in browser localStorage. For all subsequent API requests, Axios extracts 
+     this token and injects it into the HTTP headers as: Authorization: Bearer <token>.
+
+Q2: Why did you build the UI with Vanilla CSS instead of Tailwind or Bootstrap?
+Ans: Using Vanilla CSS with custom CSS variables allowed us 100% fine-grained mathematical 
+     control over our bespoke circular Orbit Arena transforms, complex backdrop-filter 
+     glassmorphism, and franchise-specific dynamic neon glow animations without the bundle 
+     bloat of external UI frameworks.
+
+Q3: How does the frontend handle real-time bid updates from other teams?
+Ans: The application connects to the Spring Boot WebSocket broker via StompJS on /ws-auction. 
+     When any team places a bid, the backend broadcasts to /topic/bids. App.jsx intercepts 
+     this message, updates the active bid price state, shifts the halo in OrbitArena, and 
+     updates the purse balance in the Leaderboard without requiring a full page refresh.
+
+Q4: How does the UI prevent accidental invalid bids?
+Ans: BiddingConsole.jsx checks the team's remaining budget against the calculated next bid. 
+     If the increment exceeds the remaining purse, the button is automatically disabled 
+     with a warning tooltip. Additionally, if the current team already holds the highest bid, 
+     bid buttons are temporarily deactivated to prevent self-outbidding.
+================================================================================
