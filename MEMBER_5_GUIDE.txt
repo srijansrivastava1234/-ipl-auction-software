@@ -1,0 +1,170 @@
+================================================================================
+🏏 IPL AUCTION SYSTEM — MEMBER 5 WORK GUIDE & ROLE BLUEPRINT
+================================================================================
+ROLE:       QA, Testing & API Documentation Lead
+BRANCH:     feature/qa-testing-docs
+WORKSPACE:  team/member-5-qa-testing-api-documentation-lead
+PORT:       http://localhost:8082 | Swagger UI: http://localhost:8082/swagger-ui/index.html
+================================================================================
+
+1. WHO YOU ARE & WHAT YOU DO (IN SIMPLE WORDS)
+--------------------------------------------------------------------------------
+You are the Quality Guardian, Automation Architect & Documentation Lead.
+Your mission is to make sure the platform is unbreakable. You create the interactive 
+Swagger / OpenAPI 3 specification page, author automated unit and edge-case test suites 
+using JUnit 5 and Mockito (testing purse overflows, anti-self bidding, and squad limits), 
+craft complete Postman test collections with automated assertions, and configure 
+the GitHub Actions CI/CD pipeline to test every commit in the cloud before merging.
+
+
+2. WHAT YOU OWN VS STRICT BOUNDARIES
+--------------------------------------------------------------------------------
+✅ WHAT YOU OWN (YOUR RESPONSIBILITY):
+- OpenAPI 3 / Swagger interactive documentation setup (config/OpenApiConfig.java).
+- Automated Unit & Service Test Suites (src/test/java/.../service/BidServiceTest.java, PlayerServiceTest.java).
+- Postman Test Suites & Environment configs (postman/IPL_Auction_System.postman_collection.json, IPL_Auction_Environment.json).
+- GitHub Actions CI/CD Pipeline automation (.github/workflows/ci.yml).
+- GitHub Branch Protection & Code Review Rules (.github/CODEOWNERS).
+
+⛔ WHAT YOU MUST NEVER TOUCH (HANDLED BY OTHERS):
+- Member 1's Domain: Core Player/Team business controllers and REST endpoints.
+- Member 2's Domain: Spring Security configuration, JWT TokenUtil implementation.
+- Member 3's Domain: MySQL schema scripts, Docker Compose, Pessimistic Row Locking algorithms.
+- Member 4's Domain: Frontend React UI, CSS styles, Orbit Arena, JSX components.
+
+
+3. TOOLS & TECH STACK YOU USE
+--------------------------------------------------------------------------------
+- JUnit 5 (Jupiter): Modern Java test execution framework.
+- Mockito: Mocking framework for isolating services and simulating repository states.
+- SpringDoc OpenAPI 3 / Swagger UI: Interactive API explorer at /swagger-ui/index.html.
+- Postman Collection Runner: Automated regression and integration API test suite.
+- GitHub Actions: Cloud-based CI/CD runners (Ubuntu, JDK 17, automated build/test gates).
+
+
+4. YOUR EXACT CODE FILES & WHAT THEY DO
+--------------------------------------------------------------------------------
+📍 config/OpenApiConfig.java
+   - Configures SpringDoc OpenAPI 3:
+     1. Defines the OpenAPI info metadata (Title, Version 1.0, Description).
+     2. Configures the JWT Bearer Security Scheme:
+        @SecurityScheme(name = "BearerAuth", type = SecuritySchemeType.HTTP, scheme = "bearer", bearerFormat = "JWT")
+     3. Adds global security requirements so developers can click "Authorize" in 
+        Swagger UI and test protected routes directly in the browser.
+
+📍 src/test/java/.../service/BidServiceTest.java
+   - Rigorous unit test suite validating the live bidding engine:
+     1. testPlaceBid_Success: Asserts valid bid updates player price and persists bid.
+     2. testPlaceBid_InsufficientBudget: Asserts RuntimeException when bid exceeds team budget.
+     3. testPlaceBid_ConsecutiveBiddingFromSameTeam: Asserts RuntimeException when team tries to outbid itself.
+     4. testPlaceBid_BelowCurrentHighestBid: Asserts RuntimeException when bid is <= highest bid.
+     5. testPlaceBid_BelowBasePrice: Asserts rejection when first bid is lower than player base price.
+
+📍 src/test/java/.../service/PlayerServiceTest.java
+   - Comprehensive unit test suite for squad management:
+     1. testSellPlayer_Success: Asserts player is marked SOLD and budget is deducted.
+     2. testSellPlayer_ExceedMaxSquadLimit: Asserts failure when team has 25 players.
+     3. testSellPlayer_ExceedMaxOverseasLimit: Asserts failure when team has 8 overseas players.
+     4. testSellPlayer_InsufficientBudget: Asserts failure when team cannot afford player.
+     5. testMarkUnsold_RefundsBudget: Verifies that marking a sold player UNSOLD refunds team purse.
+
+📍 postman/IPL_Auction_System.postman_collection.json & IPL_Auction_Environment.json
+   - Full REST test collection with pre-request scripts and automated assertions (pm.test):
+     1. Authentication: Login (Admin & Team Owners) -> Automatically saves jwt_token variable.
+     2. Team Management: GET /api/teams, POST /api/teams, budget assertions.
+     3. Player Management: GET /api/players, PUT /api/players/{id}/sell.
+     4. Bidding Engine: POST /api/bids, concurrent bid verification.
+
+📍 .github/workflows/ci.yml
+   - Cloud CI automation:
+     1. Triggers on every Push and Pull Request to main and develop branches.
+     2. Runs on ubuntu-latest with Eclipse Temurin JDK 17.
+     3. Caches Maven packages (~/.m2) for fast execution.
+     4. Executes ./mvnw clean test to verify all test suites pass.
+     5. Generates and uploads test failure reports as workflow artifacts.
+
+📍 .github/CODEOWNERS
+   - Enforces peer code reviews by assigning subsystem ownership to each team member.
+
+
+5. YOUR POM.XML DEPENDENCIES (EXPLAINED SIMPLY)
+--------------------------------------------------------------------------------
+1. springdoc-openapi-starter-webmvc-ui:
+   Auto-generates OpenAPI 3 JSON specs and hosts Swagger UI at /swagger-ui/index.html.
+2. spring-boot-starter-webmvc-test:
+   Bundles JUnit 5 Jupiter, Mockito, AssertJ, and JSONPath for comprehensive testing.
+3. spring-boot-starter-security-test:
+   Provides @WithMockUser to test protected endpoints with simulated credentials.
+
+
+6. HOW TO RUN & VERIFY YOUR WORK LOCALLY
+--------------------------------------------------------------------------------
+1. Open terminal inside your folder:
+   cd team/member-5-qa-testing-api-documentation-lead
+
+2. Execute the automated JUnit 5 test suite:
+   ./mvnw clean test
+
+3. View test results in terminal (All tests should PASS with 0 failures).
+
+4. Launch the application to inspect Swagger UI:
+   ./mvnw spring-boot:run
+   - Open browser: http://localhost:8082/swagger-ui/index.html
+   - Click "Authorize", enter your Bearer token, and execute test calls.
+
+
+7. GIT COMMANDS YOU NEED TO RUN
+--------------------------------------------------------------------------------
+# Switch to develop and branch out:
+git checkout develop
+git checkout -b feature/qa-testing-docs
+
+# Check modified files:
+git status
+
+# Stage your files:
+git add src/test/ src/main/java/.../config/OpenApiConfig.java .github/ postman/ MEMBER_5_GUIDE.txt
+
+# Commit your changes:
+git commit -m "test(qa): add JUnit 5 suites, OpenAPI 3 Swagger config, Postman collection, and CI workflow"
+
+# Push to remote repository:
+git push origin feature/qa-testing-docs
+
+
+8. EXACT WORDS TO SAY TO YOUR MENTOR (PRESENTATION SCRIPT)
+--------------------------------------------------------------------------------
+"Hello Sir. As Member 5 and QA, Testing & API Documentation Lead:
+1. I integrated SpringDoc OpenAPI 3 in OpenApiConfig.java, exposing an interactive Swagger UI at /swagger-ui/index.html with JWT Bearer security scheme authentication.
+2. I designed and executed comprehensive automated test suites using JUnit 5 and Mockito in BidServiceTest and PlayerServiceTest.
+3. I verified all edge cases: ensuring the system throws explicit exceptions and prevents dirty states when a team attempts to outbid itself, bid beyond its remaining purse, or exceed the 25-player / 8-overseas limits.
+4. I created full-coverage Postman collections with automated test assertions and configured the GitHub Actions CI/CD Pipeline (.github/workflows/ci.yml) to automatically compile and test every pull request on an Ubuntu container."
+
+
+9. TOP MENTOR QUESTIONS & HOW TO ANSWER CONFIDENTLY
+--------------------------------------------------------------------------------
+Q1: What does your GitHub Actions CI workflow do on every pull request?
+Ans: The CI pipeline runs inside an isolated ubuntu-latest container with JDK 17. It 
+     checks out the codebase, restores the Maven dependency cache, compiles the application, 
+     and executes all JUnit 5 test suites via ./mvnw clean test. If any single test fails or 
+     a compile error occurs, the pull request status is marked red and merging is blocked.
+
+Q2: Why did you use Mockito instead of running tests against a live MySQL database?
+Ans: Unit tests must be ultra-fast, deterministic, and isolated. Using Mockito allows us to 
+     mock repository interactions (like playerRepository.findByIdForUpdate()) in-memory in 
+     milliseconds without requiring an active MySQL instance or network connectivity, while 
+     verifying method interactions with verify().
+
+Q3: What critical bidding edge cases are covered by your tests?
+Ans: In BidServiceTest, we assert:
+     1. testPlaceBid_InsufficientBudget: Bids exceeding current team purse fail.
+     2. testPlaceBid_ConsecutiveBiddingFromSameTeam: Consecutive bids by the same franchise are blocked.
+     3. testPlaceBid_BelowCurrentHighestBid: Bids equal to or lower than the active bid are rejected.
+     4. testPlaceBid_BelowBasePrice: First bid below the player's base price is rejected.
+
+Q4: How does Swagger UI support testing JWT-protected endpoints?
+Ans: In OpenApiConfig.java, we declare a SecurityScheme of type HTTP Bearer format JWT. 
+     This renders an 'Authorize' padlock button in Swagger UI. Developers authenticate via 
+     /api/auth/login, copy the token into Swagger's Authorize dialog, and Swagger automatically 
+     attaches the Authorization: Bearer <token> header to all subsequent interactive API tests.
+================================================================================

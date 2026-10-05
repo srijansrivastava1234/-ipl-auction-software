@@ -1,0 +1,17 @@
+# Real-Time & Config (Member 1 - You)
+/backend/src/main/java/com/ipl/auction/config/ @srijansrivastava1234
+
+# Backend REST APIs (Member 2)
+/backend/src/main/java/com/ipl/auction/controller/ amitkumarrajput1133-oss
+/backend/src/main/java/com/ipl/auction/service/ amitkumarrajput1133-oss
+
+# Database & Entities (Member 3)
+/backend/src/main/java/com/ipl/auction/model/ sharmaakhilesh8273-lgtm
+/backend/src/main/java/com/ipl/auction/repository/ sharmaakhilesh8273-lgtm
+
+# Frontend UI Components (Member 4)
+/frontend/src/components/ anshikapandey-bit 
+
+# Frontend State & WebSockets Hooks (Member 5)
+/frontend/src/context/ suryansh-svg
+/frontend/src/hooks/ suryansh-svg
