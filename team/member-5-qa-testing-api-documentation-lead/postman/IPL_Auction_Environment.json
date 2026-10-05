@@ -1,0 +1,30 @@
+{
+  "id": "ipl-auction-environment-local",
+  "name": "IPL Auction Local Environment",
+  "values": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8082",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "secret",
+      "enabled": true
+    },
+    {
+      "key": "admin_jwt_token",
+      "value": "",
+      "type": "secret",
+      "enabled": true
+    },
+    {
+      "key": "csk_team_id",
+      "value": "1",
+      "type": "default",
+      "enabled": true
+    }
+  ]
+}

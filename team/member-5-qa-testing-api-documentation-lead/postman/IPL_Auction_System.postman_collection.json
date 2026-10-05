@@ -1,0 +1,328 @@
+{
+  "info": {
+    "_postman_id": "ipl-auction-system-collection-v1",
+    "name": "🏏 IPL Mega Auction System - Full Test Suite",
+    "description": "Comprehensive Postman test collection for IPL Auction System created by Member 5 (QA & API Documentation Lead). Includes Auth, Teams, Players, and Live Bidding test scenarios.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Login as CSK Team Owner",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "var jsonData = pm.response.json();",
+                  "pm.test('Returns valid JWT token', function () {",
+                  "    pm.expect(jsonData.token).to.be.a('string');",
+                  "    pm.environment.set('jwt_token', jsonData.token);",
+                  "    pm.environment.set('csk_team_id', jsonData.teamId);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"csk_owner\",\n  \"password\": \"csk123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login as Admin (Auctioneer)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "var jsonData = pm.response.json();",
+                  "pm.test('Returns admin token', function () {",
+                  "    pm.expect(jsonData.role).to.eql('ADMIN');",
+                  "    pm.environment.set('admin_jwt_token', jsonData.token);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+        },
+        {
+          "name": "Register New Franchise Team",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "var jsonData = pm.response.json();",
+                  "pm.test('Returns new franchise token and team ID', function () {",
+                  "    pm.expect(jsonData.token).to.be.a('string');",
+                  "    pm.expect(jsonData.teamId).to.be.a('number');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"teamName\": \"Ahmedabad Aces\",\n  \"username\": \"aces_owner\",\n  \"password\": \"aces123\",\n  \"budget\": 1000000000.00\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register-team",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register-team"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Teams & Purse Tracking",
+      "item": [
+        {
+          "name": "Get All 10 Teams (Purse Status)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "var jsonData = pm.response.json();",
+                  "pm.test('Contains all 10 franchises', function () {",
+                  "    pm.expect(jsonData.length).to.be.at.least(10);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/teams",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "teams"]
+            }
+          }
+        },
+        {
+          "name": "Get Team by ID (CSK)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/teams/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "teams", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Players & Auction Lots",
+      "item": [
+        {
+          "name": "Get All Players",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/players",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "players"]
+            }
+          }
+        },
+        {
+          "name": "Get Unsold Players Lot",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/players/unsold",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "players", "unsold"]
+        },
+        {
+          "name": "Create New Player (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Player created with status 201', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "var jsonData = pm.response.json();",
+                  "pm.test('Returns created player details', function () {",
+                  "    pm.expect(jsonData.name).to.eql('Heinrich Klaasen');",
+                  "    pm.expect(jsonData.status).to.eql('UNSOLD');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Heinrich Klaasen\",\n  \"role\": \"Wicketkeeper Batsman\",\n  \"country\": \"South Africa\",\n  \"basePrice\": 20000000.00,\n  \"status\": \"UNSOLD\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/players",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "players"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Live Bidding Engine",
+      "item": [
+        {
+          "name": "Place Valid Bid (+₹20 Lakhs)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Bid placed successfully or handled with rule message', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 400]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"playerId\": 1,\n  \"teamId\": 1,\n  \"amount\": 22000000\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/bids",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "bids"]
+            }
+          }
+        },
+        {
+          "name": "Get Highest Bid for Active Player",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/bids/player/1/highest",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "bids", "player", "1", "highest"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
