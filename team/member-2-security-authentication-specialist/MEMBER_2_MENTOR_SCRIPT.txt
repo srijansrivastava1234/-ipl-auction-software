@@ -1,0 +1,256 @@
+================================================================================
+IPL MEGA AUCTION SYSTEM — MEMBER 2 MENTOR PRESENTATION SCRIPT & VIVA MASTER GUIDE
+================================================================================
+ROLE:              Member 2 — Security & Authentication Specialist
+STATUS:            100% COMPLETE & VERIFIED
+TECH STACK:        Spring Security 6, Stateless JWT (HMAC-SHA256), BCrypt, STOMP Security
+PRIMARY WORKSPACE: backend/src/main/java/com/ipl/auction/config/ & controller/AuthController.java
+KEY CODE FILES:    
+  - config/SecurityConfig.java
+  - config/TokenUtil.java
+  - config/TokenAuthenticationFilter.java
+  - config/WebSocketSecurityInterceptor.java
+  - config/WebSocketHandshakeInterceptor.java
+  - controller/AuthController.java
+  - service/UserService.java
+  - dto/LoginRequest.java, dto/LoginResponse.java, dto/RegisterTeamRequest.java
+================================================================================
+
+--------------------------------------------------------------------------------
+TABLE OF CONTENTS
+--------------------------------------------------------------------------------
+1. Opening Speech & Introduction (Say this word-for-word)
+2. Comprehensive Role & Security Architecture Overview
+3. Deep-Dive Code Walkthrough (File-by-File, Filter-by-Filter)
+4. Cryptographic Protocols & Security Rules Implemented
+5. Live Demonstration Guide (What to show the mentor)
+6. Complete Technical Defense (Stateless JWT vs Sessions, BCrypt vs SHA-256)
+7. Exhaustive Mentor Q&A / Viva Defense Preparation
+8. Transition to Member 3
+
+================================================================================
+1. OPENING SPEECH & INTRODUCTION (SAY THIS TO THE MENTOR)
+================================================================================
+
+"Respected Mentor / Sir / Ma'am, Good morning.
+
+I am Member 2, the Security & Authentication Specialist for our team.
+
+In any multi-user financial bidding platform like the IPL Auction, security is not 
+an afterthought—it is the bedrock of system integrity. Without strict access controls, 
+malicious actors could impersonate competing franchises (e.g., placing an unauthorized 
+bid for Mumbai Indians while logged in as Chennai Super Kings) or hijack administrative 
+privileges to sell players illegally.
+
+My mission was to engineer a zero-trust, completely stateless security perimeter. 
+
+I implemented:
+1. Spring Security 6 with stateless session architecture.
+2. Cryptographic JWT (JSON Web Token) generation and signature validation using HMAC-SHA256.
+3. A custom `OncePerRequestFilter` to intercept every HTTP request and populate the 
+   `SecurityContextHolder` with authenticated franchise claims.
+4. WebSocket channel security interceptors that validate JWT tokens on raw STOMP 
+   `CONNECT` frames before allowing any client to subscribe or bid.
+5. One-way salted password hashing using BCrypt so that no plaintext credentials 
+   are ever stored.
+
+Our security implementation is 100% complete and fully verified. Allow me to walk 
+you through the code and architectural decisions."
+
+================================================================================
+2. COMPREHENSIVE ROLE & SECURITY ARCHITECTURE OVERVIEW
+================================================================================
+
+As the Security Specialist, my core achievements include:
+
+1. 100% Stateless Authentication Architecture:
+   - Eliminated server-side HTTP sessions (`SessionCreationPolicy.STATELESS`), allowing 
+     infinite horizontal scaling without distributed session synchronization bottlenecks.
+
+2. Role-Based Access Control (RBAC):
+   - Defined two distinct authority tiers:
+     * `ROLE_ADMIN` (Auctioneer): Exclusive permission to open auction rounds, declare 
+       players sold (`PUT /api/players/{id}/sell`), mark players unsold, and add new players.
+     * `ROLE_TEAM_OWNER` (Franchises): Restricted strictly to placing bids for their 
+       own assigned `teamId` and viewing catalog data.
+
+3. Live WebSocket Security Interceptor:
+   - Regular HTTP filters cannot inspect continuous WebSocket data frames. I built a 
+     STOMP `ChannelInterceptor` (`WebSocketSecurityInterceptor`) that extracts the JWT 
+     during the initial handshake and validates the user's principal before any live 
+     frame is processed.
+
+4. Anti-Impersonation Guard:
+   - Bound franchise identity (`teamId`) cryptographically into the token payload so that 
+     a compromised client cannot forge request payloads claiming to belong to another team.
+
+================================================================================
+3. DEEP-DIVE CODE WALKTHROUGH (FILE-BY-FILE & FILTER-BY-FILTER)
+================================================================================
+
+Mentor: "Open your security files and explain how the filter chain processes a request."
+
+--------------------------------------------------------------------------------
+A. `config/SecurityConfig.java` (The Master Security Rulebook)
+--------------------------------------------------------------------------------
+- Purpose: Configures Spring Security 6 filter chain and authorization rules.
+- Key Elements:
+  * `@Configuration`, `@EnableWebSecurity`, `@EnableMethodSecurity`.
+  * `SecurityFilterChain` Bean:
+    1. `csrf(csrf -> csrf.disable())`: CSRF is disabled safely because our API is stateless 
+       and does not rely on browser cookies.
+    2. `cors(cors -> cors.configurationSource(...))`: Enables CORS for `http://localhost:5173` 
+       with methods GET, POST, PUT, DELETE, OPTIONS and headers `Authorization`, `Content-Type`.
+    3. `sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))`: 
+       No HTTP session cookies are created.
+    4. Route Matchers:
+       - `.requestMatchers("/api/auth/**", "/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**", "/ws-auction/**").permitAll()`
+       - `.requestMatchers(HttpMethod.PUT, "/api/players/*/sell", "/api/players/*/unsold").hasRole("ADMIN")`
+       - `.requestMatchers(HttpMethod.POST, "/api/auction/active/**").hasRole("ADMIN")`
+       - `.requestMatchers(HttpMethod.POST, "/api/bids").hasAnyRole("TEAM_OWNER", "ADMIN")`
+       - `.anyRequest().authenticated()`
+    5. Injects `TokenAuthenticationFilter` BEFORE `UsernamePasswordAuthenticationFilter`.
+    6. Registers `BCryptPasswordEncoder` bean with strength factor 10.
+
+--------------------------------------------------------------------------------
+B. `config/TokenUtil.java` (JWT Token Engine)
+--------------------------------------------------------------------------------
+- Purpose: Generates, signs, parses, and validates JSON Web Tokens.
+- Algorithmic Details:
+  * Uses HMAC-SHA256 signature algorithm with a secure 256-bit secret key.
+  * `generateToken(User user)`:
+    - Sets subject to `user.getUsername()`.
+    - Injects custom claims: `role` ("ROLE_ADMIN" or "ROLE_TEAM_OWNER") and `teamId`.
+    - Sets `issuedAt = now` and `expiration = now + 24 hours` (86,400,000 ms).
+    - Signs payload with `Keys.hmacShaKeyFor(secretKey.getBytes())`.
+  * `validateToken(String token)`:
+    - Parses claims, verifies signature integrity, and ensures `expiration.after(new Date())`.
+  * `extractUsername(String token)` & `extractTeamId(String token)`:
+    - Decodes claims without database queries for lightning-fast verification.
+
+--------------------------------------------------------------------------------
+C. `config/TokenAuthenticationFilter.java` (HTTP Request Interceptor)
+--------------------------------------------------------------------------------
+- Purpose: Custom filter extending `OncePerRequestFilter`.
+- Execution Flow:
+  1. Reads the `Authorization` HTTP header from `HttpServletRequest`.
+  2. Checks if header starts with `"Bearer "`. If absent, passes request down the chain.
+  3. Extracts the token substring.
+  4. Validates token via `tokenUtil.validateToken(jwt)`.
+  5. Extracts username and role; creates a `UsernamePasswordAuthenticationToken` with 
+     `SimpleGrantedAuthority(role)`.
+  6. Loads token into `SecurityContextHolder.getContext().setAuthentication(auth)`.
+  7. Calls `filterChain.doFilter(request, response)` to proceed to the controller.
+
+--------------------------------------------------------------------------------
+D. `config/WebSocketSecurityInterceptor.java` (Live Socket Interceptor)
+--------------------------------------------------------------------------------
+- Purpose: Secures WebSocket STOMP messaging channels.
+- Implementation:
+  * Implements `ChannelInterceptor`.
+  * In `preSend(Message<?> message, MessageChannel channel)`:
+    - Checks if `StompHeaderAccessor.getCommand() == StompCommand.CONNECT`.
+    - Extracts token from native STOMP headers (`Authorization` or query param `token`).
+    - Validates JWT signature. If valid, sets `accessor.setUser(authenticatedPrincipal)`.
+    - If invalid or expired, aborts the WebSocket connection immediately, preventing 
+      unauthorized listeners or rogue bid injectors.
+
+--------------------------------------------------------------------------------
+E. `controller/AuthController.java` & `service/UserService.java`
+--------------------------------------------------------------------------------
+- Endpoints:
+  * `POST /api/auth/login`:
+    1. Looks up user by username.
+    2. Compares raw password with hashed password via `passwordEncoder.matches(raw, hash)`.
+    3. If valid, generates JWT via `tokenUtil.generateToken(user)` and returns `LoginResponse`.
+    4. If invalid, throws `BadCredentialsException("Invalid username or password")`.
+  * `POST /api/auth/register-team`:
+    1. Registers new team owner with encrypted password `passwordEncoder.encode(raw)`.
+    2. Links owner to franchise record.
+
+================================================================================
+4. CRYPTOGRAPHIC PROTOCOLS & SECURITY RULES IMPLEMENTED
+================================================================================
+
+1. JWT Structure:
+   - Header: `{ "alg": "HS256", "typ": "JWT" }`
+   - Payload: `{ "sub": "csk_owner", "role": "ROLE_TEAM_OWNER", "teamId": 1, "exp": 17279... }`
+   - Signature: `HMACSHA256(base64UrlEncode(header) + "." + base64UrlEncode(payload), secret)`
+
+2. BCrypt Adaptive Salt Algorithm:
+   - Generates a unique 128-bit salt for every password.
+   - Work factor: 10 rounds (2^10 = 1024 hashing iterations), defeating rainbow tables.
+
+3. Anti-Impersonation Assertion:
+   - If a user with token `teamId: 1` sends a bid with payload `{ "teamId": 2 }`, the 
+     controller detects the mismatch and throws HTTP 403 Forbidden.
+
+================================================================================
+5. LIVE DEMONSTRATION GUIDE (WHAT TO SHOW THE MENTOR)
+================================================================================
+
+1. Demonstrate JWT Login:
+   - Send `POST /api/auth/login` with `{ "username": "admin", "password": "password" }`.
+   - Show the returned JWT token string in the JSON response.
+2. Demonstrate Protected Route Rejection:
+   - Try accessing `PUT /api/players/1/sell` with NO token -> Show HTTP 401/403.
+   - Attach header `Authorization: Bearer <token>` -> Show successful execution.
+3. Demonstrate Role Restriction (RBAC):
+   - Login as `csk_owner` (ROLE_TEAM_OWNER).
+   - Attempt to call Admin-only endpoint `POST /api/auction/active/1` -> Show HTTP 403 Forbidden.
+
+================================================================================
+6. COMPLETE TECHNICAL DEFENSE (WHY WE CHOSE THIS STACK)
+================================================================================
+
+- Why Stateless JWT over Sticky HTTP Sessions?
+  * HTTP sessions store state in server memory. If 10,000 users connect or the server 
+    scales across multiple containers, sessions require Redis sticky clusters. JWT is 
+    stateless and self-contained; any server instance can verify the digital signature 
+    cryptographically in CPU memory in less than 1 millisecond.
+- Why is CSRF disabled?
+  * CSRF attacks rely on browsers automatically attaching session cookies (`JSESSIONID`) 
+    on cross-site requests. Because we store JWT in local client memory and pass it via the 
+    `Authorization: Bearer` header, malicious websites cannot exploit cookie ambient authority.
+
+================================================================================
+7. EXHAUSTIVE MENTOR Q&A / VIVA DEFENSE PREPARATION
+================================================================================
+
+Q1: What is inside a JSON Web Token and how do you know it hasn't been tampered with?
+Answer:
+"A JWT consists of 3 Base64URL-encoded parts separated by dots: Header, Payload, and Signature. 
+The Signature is calculated by hashing the Header and Payload together with our private secret key 
+using HMAC-SHA256. If a malicious user changes a single bit in the payload (e.g., modifying 
+their `teamId` or `role`), the signature verification fails instantly on the server, and the 
+request is rejected."
+
+Q2: How does TokenAuthenticationFilter hook into Spring Security?
+Answer:
+"In `SecurityConfig`, we register `TokenAuthenticationFilter` before `UsernamePasswordAuthenticationFilter`. 
+On every incoming HTTP request, our filter extracts the Bearer token, validates it via `TokenUtil`, 
+constructs an authenticated `UsernamePasswordAuthenticationToken`, and inserts it into Spring's 
+`SecurityContextHolder`. Subsequent filters and controllers can then access `@PreAuthorize` or 
+`SecurityContext` seamlessly."
+
+Q3: How do you secure WebSockets where standard HTTP headers aren't sent on every frame?
+Answer:
+"WebSockets establish an initial HTTP handshake upgrade, followed by a persistent TCP connection 
+using the STOMP subprotocol. I registered a `WebSocketSecurityInterceptor` implementing Spring's 
+`ChannelInterceptor`. When a client sends a STOMP `CONNECT` frame, the interceptor extracts the 
+JWT token from the STOMP headers, authenticates the user, and attaches the principal to the socket session."
+
+Q4: Why use BCrypt instead of standard SHA-256 for passwords?
+Answer:
+"Standard SHA-256 is designed to be extremely fast for file verification. Attackers can test billions 
+of SHA-256 hashes per second using GPUs and precomputed rainbow tables. BCrypt is a slow, salted, 
+key-derivation hash with an adjustable work factor that makes brute-force and rainbow table attacks 
+computationally impossible."
+
+================================================================================
+8. TRANSITION TO MEMBER 3 (PASSING THE MIC)
+================================================================================
+
+"Thank you, Sir. Now I would like to hand over the mic to Member 3, who designed 
+our MySQL relational schema and solved our high-concurrency pessimistic locking bidding engine."
+================================================================================

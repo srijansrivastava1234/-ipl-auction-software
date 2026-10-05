@@ -1,0 +1,176 @@
+================================================================================
+🏏 IPL AUCTION SYSTEM — MEMBER 2 WORK GUIDE & ROLE BLUEPRINT
+================================================================================
+ROLE:       Security & Authentication Specialist
+BRANCH:     feature/security-auth
+WORKSPACE:  team/member-2-security-authentication-specialist
+PORT:       http://localhost:8082
+================================================================================
+
+1. WHO YOU ARE & WHAT YOU DO (IN SIMPLE WORDS)
+--------------------------------------------------------------------------------
+You are the Security Guard, Cryptographer & Keymaker of the entire platform.
+Your mission is to lock down the system using Spring Security 6, build a 100% 
+stateless JSON Web Token (JWT) infrastructure, safely encrypt passwords with 
+BCrypt one-way hashing, enforce strict Role-Based Access Control (RBAC), and 
+intercept both HTTP REST calls and real-time WebSocket connections so unauthorized 
+users can never place bids or tamper with auction assets.
+
+
+2. WHAT YOU OWN VS STRICT BOUNDARIES
+--------------------------------------------------------------------------------
+✅ WHAT YOU OWN (YOUR RESPONSIBILITY):
+- Spring Security 6 SecurityFilterChain & CORS configuration (SecurityConfig.java).
+- JWT Token generation, HMAC signing, claim extraction, and expiry validation (TokenUtil.java).
+- HTTP Authentication Filter (TokenAuthenticationFilter.java).
+- Real-time STOMP WebSocket Security (WebSocketSecurityInterceptor & WebSocketHandshakeInterceptor).
+- Authentication Controller & Service (/api/auth/login, /api/auth/register, /api/auth/register-team).
+- Password encryption using BCryptPasswordEncoder.
+- Auth DTOs: LoginRequest.java, LoginResponse.java, RegisterTeamRequest.java.
+
+⛔ WHAT YOU MUST NEVER TOUCH (HANDLED BY OTHERS):
+- Member 1's Domain: Team/Player CRUD operations, squad limit enforcement (25 players / 8 overseas).
+- Member 3's Domain: Database DDL schema, pessimistic row locking, live bidding algorithm.
+- Member 4's Domain: Frontend React UI, CSS styling, JSX component hierarchy.
+- Member 5's Domain: Mockito unit tests, Swagger UI documentation, GitHub Actions CI workflow.
+
+
+3. TOOLS & TECH STACK YOU USE
+--------------------------------------------------------------------------------
+- Spring Security 6: Enterprise access control and filter chain framework.
+- JWT (JSON Web Tokens): Stateless digital passports with 24-hour expiration.
+- BCrypt: Industry-standard adaptive salt password hashing algorithm.
+- Spring WebSocket Security: STOMP channel interceptors for live bidding sockets.
+- Postman: For testing login, token generation, and Bearer authentication headers.
+
+
+4. YOUR EXACT CODE FILES & WHAT THEY DO
+--------------------------------------------------------------------------------
+📍 config/SecurityConfig.java
+   - Master security rulebook for HTTP traffic:
+     1. Disables CSRF (safe because API is stateless and does not use browser cookies).
+     2. Enables CORS with allowed origins (http://localhost:5173 for Vite frontend).
+     3. Configures route authorization:
+        - .requestMatchers("/api/auth/**").permitAll()
+        - .requestMatchers("/ws-auction/**").permitAll()
+        - .requestMatchers(HttpMethod.POST, "/api/auction/active/**").hasRole("ADMIN")
+        - .requestMatchers(HttpMethod.PUT, "/api/players/*/sell", "/api/players/*/unsold").hasRole("ADMIN")
+        - .requestMatchers(HttpMethod.POST, "/api/bids").hasAnyRole("TEAM_OWNER", "ADMIN")
+        - .anyRequest().authenticated()
+     4. Injects TokenAuthenticationFilter before UsernamePasswordAuthenticationFilter.
+     5. Registers the BCryptPasswordEncoder bean.
+
+📍 config/TokenUtil.java
+   - Generates signed JWT tokens containing username, user role (ADMIN / TEAM_OWNER), 
+     teamId, and issued/expiration timestamps (24 hours validity).
+   - Validates incoming token signatures, detects expired tokens, and decodes 
+     UserTokenState securely.
+
+📍 config/TokenAuthenticationFilter.java
+   - Custom OncePerRequestFilter executed before every incoming HTTP request.
+   - Extracts the "Authorization: Bearer <token>" header, validates the JWT, builds a 
+     UsernamePasswordAuthenticationToken with granted authorities (ROLE_ADMIN, ROLE_TEAM_OWNER), 
+     and stores it into Spring's SecurityContextHolder.
+
+📍 config/WebSocketSecurityInterceptor.java & WebSocketHandshakeInterceptor.java
+   - Secures live WebSocket STOMP connections on /ws-auction.
+   - Intercepts CONNECT commands to extract JWT tokens from query parameters or STOMP headers, 
+     authenticating real-time bid clients before allowing them to subscribe to auction topics.
+
+📍 controller/AuthController.java (/api/auth)
+   - POST /api/auth/login -> Validates username & password; returns JWT token + user details.
+   - POST /api/auth/register -> Registers a new user with BCrypt hashed password.
+   - POST /api/auth/register-team -> Registers a new team owner and associates them with a franchise.
+
+📍 service/UserService.java
+   - Manages user lookup, registration, password encoding, and credential verification.
+
+📍 dto/LoginRequest.java & dto/LoginResponse.java
+   - Login payload (username, password) and response payload (token, role, teamId, username).
+
+
+5. YOUR POM.XML DEPENDENCIES (EXPLAINED SIMPLY)
+--------------------------------------------------------------------------------
+1. spring-boot-starter-security:
+   Core security library enabling filter chains, security context, and password encoders.
+2. spring-boot-starter-webmvc:
+   Enables REST controllers for authentication endpoints.
+3. spring-boot-starter-websocket:
+   Provides WebSocket support and STOMP message channel interceptors.
+4. spring-boot-starter-data-jpa:
+   Persists and queries user credentials from the database.
+
+
+6. HOW TO RUN & VERIFY YOUR WORK LOCALLY
+--------------------------------------------------------------------------------
+1. Open terminal inside your folder:
+   cd team/member-2-security-authentication-specialist
+
+2. Compile and run the service:
+   ./mvnw clean compile
+   ./mvnw spring-boot:run
+
+3. Test Authentication via Postman:
+   - Login as Admin:
+     POST http://localhost:8082/api/auth/login
+     Body: { "username": "admin", "password": "password" }
+   - Check response: Verify that a 24-hour JWT token is returned.
+   - Test protected endpoint with Bearer token in headers:
+     GET http://localhost:8082/api/players (Header: Authorization: Bearer <token>)
+
+
+7. GIT COMMANDS YOU NEED TO RUN
+--------------------------------------------------------------------------------
+# Switch to develop and branch out:
+git checkout develop
+git checkout -b feature/security-auth
+
+# Check modified files:
+git status
+
+# Stage your files:
+git add src/ pom.xml MEMBER_2_GUIDE.txt
+
+# Commit your changes:
+git commit -m "feat(security): implement Spring Security 6, JWT TokenUtil, and STOMP WebSocket interceptors"
+
+# Push to remote repository:
+git push origin feature/security-auth
+
+
+8. EXACT WORDS TO SAY TO YOUR MENTOR (PRESENTATION SCRIPT)
+--------------------------------------------------------------------------------
+"Hello Sir. As Member 2 and Security & Authentication Specialist:
+1. I engineered the complete security perimeter using Spring Security 6 with a 100% stateless session policy.
+2. I built TokenUtil.java to generate cryptographically signed JWT tokens carrying the username, role (ADMIN or TEAM_OWNER), and team ID, valid for 24 hours.
+3. I created TokenAuthenticationFilter.java, which intercepts all HTTP requests, extracts the Bearer token, and populates the SecurityContext with appropriate Role-Based Access authorities.
+4. I protected real-time auction WebSockets using WebSocketSecurityInterceptor so that live STOMP connections are verified against valid JWT credentials before any bid can be placed.
+5. All user passwords are encrypted using BCrypt one-way hashing to guarantee that plaintext credentials are never stored in the database."
+
+
+9. TOP MENTOR QUESTIONS & HOW TO ANSWER CONFIDENTLY
+--------------------------------------------------------------------------------
+Q1: Why did you choose Stateless JWT authentication over HTTP Sessions?
+Ans: In a distributed, real-time bidding application with hundreds of concurrent users, 
+     server-side HTTP sessions consume significant server memory and complicate horizontal 
+     scaling. JWT is stateless and self-contained; the server validates the token's digital 
+     signature mathematically without querying a session store on every single request.
+
+Q2: Why is CSRF disabled in your SecurityConfig?
+Ans: CSRF (Cross-Site Request Forgery) attacks exploit ambient browser credentials stored 
+     in HTTP cookies. Because our application uses token-based Bearer authentication stored 
+     in the client and sent explicitly via the Authorization header, browsers never attach 
+     credentials automatically, making CSRF protection unnecessary.
+
+Q3: How does BCrypt protect passwords against rainbow table attacks?
+Ans: BCrypt generates a random salt for every password during hashing and incorporates 
+     an adaptive work factor (iteration rounds). This means even if two users have the 
+     exact same password ("password123"), their resulting BCrypt hashes are completely 
+     different, neutralizing rainbow table lookups and brute-force attempts.
+
+Q4: How do you prevent a regular Team Owner from calling Auctioneer Admin endpoints?
+Ans: In SecurityConfig.java, we enforce strict URL matchers such as:
+     .requestMatchers(HttpMethod.PUT, "/api/players/*/sell").hasRole("ADMIN")
+     If a user with ROLE_TEAM_OWNER attempts to access this endpoint, Spring Security's 
+     filter chain immediately rejects the request with an HTTP 403 Forbidden status.
+================================================================================
