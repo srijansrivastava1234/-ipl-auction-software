@@ -58,7 +58,7 @@ Key Files Managed:
 --------------------------------------------------------------------------------
 MEMBER 3: DATABASE SCHEMA & JPA REPOSITORIES ENGINEER
 --------------------------------------------------------------------------------
-GitHub Handle: @sharmaakhilesh8273-lgtm
+GitHub Handle: @anshikapandey-bit (Anshika Pandey)
 Assigned Workspace Folder: /member-3-database
 Actual Code Paths:
 - /backend/src/main/java/com/ipl/auction/model/
@@ -82,7 +82,7 @@ Key Files Managed:
 --------------------------------------------------------------------------------
 MEMBER 4: FRONTEND UI & CSS DESIGNER
 --------------------------------------------------------------------------------
-GitHub Handle: @anshikapandey-bit
+GitHub Handle: @sharmaakhilesh8273-lgtm (Akhilesh Sharma)
 Assigned Workspace Folder: /member-4-frontend-ui
 Actual Code Paths:
 - /frontend/src/components/

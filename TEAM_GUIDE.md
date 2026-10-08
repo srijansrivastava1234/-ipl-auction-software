@@ -16,12 +16,12 @@ This directory structure divides the **IPL Auction System** project among 5 team
    - **Git Branch:** `feature/security-auth`
    - **Assigned Scope:** Spring Security 6 filter chain, `PasswordEncoder` (BCrypt), JWT token utilities (`TokenUtil`), JWT request filter (`TokenAuthenticationFilter`), registration & login REST APIs (`/api/v1/auth/**`), role-based access control (`ADMIN` vs `TEAM_OWNER`).
 
-3. **[Member 3: Database & Bidding Engine Developer](file:///c:/Users/hp/ipl_auction_system%20complete/team/member-3-database-bidding-engine-developer/README.md)**
+3. **[Member 3: Database & Bidding Engine Developer — Anshika Pandey (`@anshikapandey-bit`)](file:///c:/Users/hp/ipl_auction_system%20complete/team/member-3-database-bidding-engine-developer/README.md)**
    - **Assigned Folder:** [`team/member-3-database-bidding-engine-developer`](file:///c:/Users/hp/ipl_auction_system%20complete/team/member-3-database-bidding-engine-developer/)
    - **Git Branch:** `feature/database-bidding`
    - **Assigned Scope:** MySQL ER diagram & DDL SQL schema (`schema.sql`), JPA entities & Hibernate mappings (`User`, `Team`, `Player`, `Bid`, `Auction`), pessimistic row locks (`@Lock(LockModeType.PESSIMISTIC_WRITE)`), live bidding REST APIs (`/api/v1/bids/**`), bidding increment rules & race condition prevention.
 
-4. **[Member 4: Frontend & API Integration Lead](file:///c:/Users/hp/ipl_auction_system%20complete/team/member-4-frontend-api-integration-lead/README.md)**
+4. **[Member 4: Frontend & API Integration Lead — Akhilesh Sharma (`@sharmaakhilesh8273-lgtm`)](file:///c:/Users/hp/ipl_auction_system%20complete/team/member-4-frontend-api-integration-lead/README.md)**
    - **Assigned Folder:** [`team/member-4-frontend-api-integration-lead`](file:///c:/Users/hp/ipl_auction_system%20complete/team/member-4-frontend-api-integration-lead/)
    - **Git Branch:** `feature/frontend-ui`
    - **Assigned Scope:** Vite + React SPA architecture, Cybernetic Dark Cricket Design System (`index.css`), Auth UI (`Login.jsx`), JWT storage & Bearer header interceptor, Live Player Card (`PlayerCard.jsx`), Orbit Arena (`OrbitArena.jsx`), Bidding Console (`BiddingConsole.jsx`), Franchise Leaderboard & Purse Tracker (`Leaderboard.jsx`).

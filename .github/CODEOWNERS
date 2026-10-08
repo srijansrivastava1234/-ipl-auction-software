@@ -5,12 +5,12 @@
 /backend/src/main/java/com/ipl/auction/controller/ amitkumarrajput1133-oss
 /backend/src/main/java/com/ipl/auction/service/ amitkumarrajput1133-oss
 
-# Database & Entities (Member 3)
-/backend/src/main/java/com/ipl/auction/model/ sharmaakhilesh8273-lgtm
-/backend/src/main/java/com/ipl/auction/repository/ sharmaakhilesh8273-lgtm
+# Database & Entities (Member 3 - Anshika Pandey)
+/backend/src/main/java/com/ipl/auction/model/ anshikapandey-bit
+/backend/src/main/java/com/ipl/auction/repository/ anshikapandey-bit
 
-# Frontend UI Components (Member 4)
-/frontend/src/components/ anshikapandey-bit 
+# Frontend UI Components (Member 4 - Akhilesh Sharma)
+/frontend/src/components/ sharmaakhilesh8273-lgtm 
 
 # Frontend State & WebSockets Hooks (Member 5)
 /frontend/src/context/ suryansh-svg

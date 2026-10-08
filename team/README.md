@@ -6,13 +6,13 @@ Welcome to the **IPL Auction System** team repository. This repository organizes
 
 ## 👥 5-Member Team Overview & Assigned Workspaces
 
-| Member | Role | Workspace Directory | Git Branch | Primary Tech Stack |
-| :--- | :--- | :--- | :--- | :--- |
-| **Member 1** | **Project Lead & Core Backend** | [`member-1-project-lead-core-backend`](./member-1-project-lead-core-backend/) | `feature/core-backend` | Spring Boot 3, Java 17, JPA |
-| **Member 2** | **Security & Authentication Specialist** | [`member-2-security-authentication-specialist`](./member-2-security-authentication-specialist/) | `feature/security-auth` | Spring Security 6, JWT, BCrypt |
-| **Member 3** | **Database & Bidding Engine Developer** | [`member-3-database-bidding-engine-developer`](./member-3-database-bidding-engine-developer/) | `feature/database-bidding` | MySQL 8, JPA Pessimistic Locks |
-| **Member 4** | **Frontend & API Integration Lead** | [`member-4-frontend-api-integration-lead`](./member-4-frontend-api-integration-lead/) | `feature/frontend-ui` | React 18, Vite, Cybernetic CSS |
-| **Member 5** | **QA, Testing & Documentation Lead** | [`member-5-qa-testing-api-documentation-lead`](./member-5-qa-testing-api-documentation-lead/) | `feature/qa-testing-docs` | JUnit 5, Mockito, Postman, CI |
+| Member | Assigned Member | Role | Workspace Directory | Git Branch | Primary Tech Stack |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Member 1** | **Srijan Srivastava** (`@srijansrivastava1234`) | **Project Lead & Core Backend** | [`member-1-project-lead-core-backend`](./member-1-project-lead-core-backend/) | `feature/core-backend` | Spring Boot 3, Java 17, JPA |
+| **Member 2** | **Amit Kumar Rajput** (`@amitkumarrajput1133-oss`) | **Security & Authentication Specialist** | [`member-2-security-authentication-specialist`](./member-2-security-authentication-specialist/) | `feature/security-auth` | Spring Security 6, JWT, BCrypt |
+| **Member 3** | **Anshika Pandey** (`@anshikapandey-bit`) | **Database & Bidding Engine Developer** | [`member-3-database-bidding-engine-developer`](./member-3-database-bidding-engine-developer/) | `feature/database-bidding` | MySQL 8, JPA Pessimistic Locks |
+| **Member 4** | **Akhilesh Sharma** (`@sharmaakhilesh8273-lgtm`) | **Frontend & API Integration Lead** | [`member-4-frontend-api-integration-lead`](./member-4-frontend-api-integration-lead/) | `feature/frontend-ui` | React 18, Vite, Cybernetic CSS |
+| **Member 5** | **Suryansh** (`@suryansh-svg`) | **QA, Testing & Documentation Lead** | [`member-5-qa-testing-api-documentation-lead`](./member-5-qa-testing-api-documentation-lead/) | `feature/qa-testing-docs` | JUnit 5, Mockito, Postman, CI |
 
 ---
 
